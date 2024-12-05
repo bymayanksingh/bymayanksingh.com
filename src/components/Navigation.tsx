@@ -10,8 +10,10 @@ interface NavigationProps {
 
 const navItems = [
   { path: '/', label: 'Home', ariaLabel: 'Go to Home page' },
-  { path: '/projects', label: 'Projects', ariaLabel: 'View Architecture Projects' },
-  { path: '/about', label: 'About', ariaLabel: 'Learn more about the Architect' }
+  { path: '/projects', label: 'Projects', ariaLabel: 'View Engineering Projects' },
+  { path: '/about', label: 'About', ariaLabel: 'Learn more about the Engineer' },
+  { path: '/resume', label: 'Resume', ariaLabel: 'Learn more about me through my Resume' }
+
 ];
 
 export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
@@ -72,16 +74,6 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
                 </Link>
               ))}
               <Link
-                to="/resume"
-                className={`ml-2 px-4 py-2 rounded-lg text-sm transition-all duration-300 ${
-                  location.pathname === '/resume'
-                    ? 'bg-green-600/20 text-green-400 border border-green-400/30'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-                }`}
-              >
-                <span className="text-green-400">$</span> cat resume
-              </Link>
-              <Link
                 to="/contact"
                 className="ml-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-black font-medium rounded-lg text-sm transition-all duration-300 flex items-center space-x-2"
               >
@@ -125,17 +117,6 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
               <span className="text-green-400">./</span>{item.label}
             </Link>
           ))}
-          <Link
-            to="/resume"
-            onClick={() => setIsMenuOpen(false)}
-            className={`px-6 py-3 rounded-lg text-lg transition-all duration-300 ${
-              location.pathname === '/resume'
-                ? 'bg-green-600/20 text-green-400 border border-green-400/30'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-            }`}
-          >
-            <span className="text-green-400">$</span> cat resume
-          </Link>
           <Link
             to="/contact"
             onClick={() => setIsMenuOpen(false)}
