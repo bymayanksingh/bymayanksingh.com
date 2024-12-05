@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to all collections
+    match /hero/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    match /projects/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    match /skills/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    match /testimonials/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    match /timeline/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    match /about/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    match /contact/{document=**} {
+      allow read: true;
+      allow write: false;
+    }
+    
+    // Allow creating new messages with validation
+    match /messages/{messageId} {
+      allow read: false;
+      allow create: if
+        // Required fields are present and of correct type
+        request.resource.data.firstName is string &&
+        request.resource.data.firstName.size() > 0 &&
+        request.resource.data.email is string &&
+        request.resource.data.email.matches('^[^@]+@[^@]+\\.[^@]+$') &&
+        request.resource.data.message is string &&
+        request.resource.data.message.size() > 0 &&
+        
+        // Optional fields are of correct type if present
+        (!('lastName' in request.resource.data) || request.resource.data.lastName is string) &&
+        (!('projectType' in request.resource.data) || request.resource.data.projectType is string) &&
+        
+        // Timestamp is present and is current
+        request.resource.data.createdAt is timestamp &&
+        request.time == request.resource.data.createdAt;
+    }
+    
+    // Default rule - deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,111 @@
+/* Matrix-like animation */
+@keyframes matrix {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.matrix-animate {
+  background-repeat: repeat;
+  transform: rotate(45deg) scale(2);
+  opacity: 0.1;
+}
+
+/* Tech-themed text effects */
+.text-glitch {
+  position: relative;
+  animation: glitch 1s linear infinite;
+  text-shadow: 2px 2px #00ff00;
+}
+
+@keyframes glitch {
+  2%, 64% {
+    transform: translate(2px,0) skew(0deg);
+  }
+  4%, 60% {
+    transform: translate(-2px,0) skew(0deg);
+  }
+  62% {
+    transform: translate(0,0) skew(5deg); 
+  }
+}
+
+/* Terminal-like text animation */
+.terminal-cursor::after {
+  content: '_';
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Code rain effect */
+.code-rain-effect {
+  background: linear-gradient(180deg, 
+    transparent 0%,
+    rgba(32, 202, 82, 0.1) 50%,
+    rgba(32, 202, 82, 0.2) 100%
+  );
+  background-size: 100% 200%;
+  animation: code-rain 10s linear infinite;
+}
+
+@keyframes code-rain {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 200%;
+  }
+}
+
+/* Hover effects for tech cards */
+.tech-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(32, 202, 82, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+.tech-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(32, 202, 82, 0.15);
+  border-color: rgba(32, 202, 82, 0.3);
+}
+
+/* Code syntax highlighting */
+.syntax-highlight {
+  color: #e5e5e5;
+}
+
+.syntax-highlight .keyword {
+  color: #ff79c6;
+}
+
+.syntax-highlight .string {
+  color: #50fa7b;
+}
+
+.syntax-highlight .comment {
+  color: #6272a4;
+}
+
+.syntax-highlight .function {
+  color: #50fa7b;
+}
+
+.syntax-highlight .variable {
+  color: #f8f8f2;
+}
+
+/* Glassmorphism effects */
+.glass-card {
+  background: rgba(17, 25, 40, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}

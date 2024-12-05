@@ -1,0 +1,10 @@
+{
+  "name": "firebase-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for Firebase operations",
+  "main": "duplicate-projects.js",
+  "dependencies": {
+    "firebase-admin": "^11.10.1",
+    "dotenv": "^16.3.1"
+  }
+}
