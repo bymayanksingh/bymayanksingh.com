@@ -4,6 +4,7 @@ import { Download, ArrowRight, Award, Building2, Users } from 'lucide-react';
 import { About, getAbout, Stats } from '../services/firebaseService';
 import { getStats } from '../services/dataService';
 import { ImageFallback } from './ImageFallback';
+import { motion } from 'framer-motion';
 
 const iconMap = {
   Building2,
@@ -54,84 +55,89 @@ export function HomeAbout() {
   }
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          
-          {/* Terminal-like About Section */}
-          <div className="glass-card rounded-xl overflow-hidden">
-            <div className="bg-gray-800 px-4 py-2 flex items-center space-x-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
-              <div className="ml-2 text-gray-400 text-sm font-mono">about.ts</div>
+    <section className="py-16 sm:py-20 lg:py-24 bg-gray-900 relative overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Terminal-like About Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="glass-card rounded-xl overflow-hidden shadow-2xl shadow-blue-500/5 hover:shadow-green-500/5 transition-shadow duration-500 w-full"
+        >
+          <div className="bg-gray-800/90 backdrop-blur-sm px-4 py-2 flex items-center justify-between border-b border-gray-700/50">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors"></div>
+              <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors"></div>
             </div>
-            <div className="p-6 font-mono">
-              <div className="text-green-400 mb-4">// About Me</div>
-              <div className="space-y-4 text-gray-300">
-                <div>
-                  <span className="text-purple-400">const</span>{' '}
-                  <span className="text-yellow-400">developer</span>{' '}
-                  <span className="text-blue-400">=</span> {'{'}
-                </div>
-                <div className="pl-4">
+            <div className="flex items-center space-x-2">
+              <div className="text-gray-400 text-sm font-mono">about.ts</div>
+              <div className="text-gray-500 text-xs border border-gray-700 rounded px-2 py-0.5">TypeScript</div>
+            </div>
+          </div>
+          <div className="p-6 font-mono bg-gray-900/80 backdrop-blur-sm">
+            <div className="text-green-400 mb-4 flex items-center space-x-2">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              <span>// About Me</span>
+            </div>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="space-y-4 text-gray-300"
+            >
+              <div className="group">
+                <span className="text-purple-400">const</span>{' '}
+                <span className="text-yellow-400">developer</span>{' '}
+                <span className="text-blue-400">=</span> {'{'}
+              </div>
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="pl-4 space-y-3"
+              >
+                <div className="group hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
                   <span className="text-purple-400">background:</span>{' '}
-                  <span className="text-green-300">
+                  <span className="text-green-300 group-hover:text-green-400 transition-colors">
                     "Full-stack developer with a passion for creating elegant solutions"
                   </span>,
                 </div>
-                <div className="pl-4">
+                <div className="group hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
                   <span className="text-purple-400">experience:</span> [
-                  <div className="pl-4 text-green-300">
+                  <div className="pl-4 text-green-300 group-hover:text-green-400 transition-colors">
                     "5+ years of software development",<br />
                     "Cloud architecture and DevOps",<br />
                     "UI/UX design and implementation"
                   </div>
                   ],
                 </div>
-                <div className="pl-4">
+                <div className="group hover:bg-gray-800/30 p-2 rounded-lg transition-colors">
                   <span className="text-purple-400">skills:</span> {'{'}
                   <div className="pl-4">
-                    <span className="text-blue-400">frontend:</span> [
-                    <span className="text-green-300">"React", "TypeScript", "Next.js"</span>],<br />
-                    <span className="text-blue-400">backend:</span> [
-                    <span className="text-green-300">"Node.js", "Python", "Go"</span>],<br />
-                    <span className="text-blue-400">cloud:</span> [
-                    <span className="text-green-300">"AWS", "Docker", "Kubernetes"</span>]
+                    <div className="group/skill hover:bg-gray-800/30 p-1 rounded transition-colors">
+                      <span className="text-blue-400">frontend:</span> [
+                      <span className="text-green-300 group-hover/skill:text-green-400 transition-colors">"React", "TypeScript", "Next.js"</span>],
+                    </div>
+                    <div className="group/skill hover:bg-gray-800/30 p-1 rounded transition-colors">
+                      <span className="text-blue-400">backend:</span> [
+                      <span className="text-green-300 group-hover/skill:text-green-400 transition-colors">"Node.js", "Python", "Go"</span>],
+                    </div>
+                    <div className="group/skill hover:bg-gray-800/30 p-1 rounded transition-colors">
+                      <span className="text-blue-400">cloud:</span> [
+                      <span className="text-green-300 group-hover/skill:text-green-400 transition-colors">"AWS", "Docker", "Kubernetes"</span>]
+                    </div>
                   </div>
                   {'}'}
                 </div>
-                <div>{'}'}</div>
-              </div>
-            </div>
+              </motion.div>
+              <div>{'}'};</div>
+            </motion.div>
           </div>
-
-          {/* Skills Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {[
-              { name: 'Frontend', icon: 'Code', items: ['React', 'TypeScript', 'Next.js'] },
-              { name: 'Backend', icon: 'Terminal', items: ['Node.js', 'Python', 'Go'] },
-              { name: 'Cloud', icon: 'Database', items: ['AWS', 'Docker', 'K8s'] },
-              { name: 'Tools', icon: 'Github', items: ['Git', 'VS Code', 'Figma'] },
-              { name: 'Testing', icon: 'Code', items: ['Jest', 'Cypress', 'RTL'] },
-              { name: 'Other', icon: 'Terminal', items: ['Agile', 'CI/CD', 'TDD'] }
-            ].map((skill, index) => (
-              <div
-                key={index}
-                className="glass-card p-4 rounded-lg"
-              >
-                <h3 className="text-green-400 font-mono text-sm mb-2">{skill.name}</h3>
-                <ul className="space-y-1">
-                  {skill.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className="text-gray-300 text-sm font-mono">
-                      <span className="text-green-400">$</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

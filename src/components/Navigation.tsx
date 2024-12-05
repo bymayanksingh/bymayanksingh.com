@@ -54,7 +54,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             <Link to="/" className="text-white hover:text-green-400 transition-colors">
               <div className="flex items-center space-x-2">
                 <span className="text-green-400">~/</span>
-                <span className="font-bold">{'{'}dev.name{'}'}</span>
+                <span className="font-bold">{'@'}bymayanksingh{'>'}</span>
               </div>
             </Link>
 
@@ -77,7 +77,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
                 to="/contact"
                 className="ml-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-black font-medium rounded-lg text-sm transition-all duration-300 flex items-center space-x-2"
               >
-                <span>Let's Talk</span>
+                <span>./Let's Talk</span>
               </Link>
             </div>
 
@@ -122,7 +122,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             onClick={() => setIsMenuOpen(false)}
             className="px-6 py-3 bg-green-500 hover:bg-green-600 text-black font-medium rounded-lg text-lg transition-all duration-300 flex items-center space-x-2"
           >
-            <span>Let's Talk</span>
+            <span>./Let's Talk</span>
           </Link>
         </div>
       </div>

@@ -5,11 +5,10 @@ import { getHero } from '../services/firebaseService';
 import type { Hero as HeroType } from '../services/firebaseService';
 import { getStats } from '../services/dataService';
 import { 
-  Code, Terminal, Github, Database, ArrowRight, ScrollText, 
-  Award, Building2, Users, Cpu, Boxes, Network, Workflow,
-  Binary, Braces, CircuitBoard
+  Code, Terminal, Database, ArrowRight, 
+  Award, Building2, Users, Cpu, Network, Workflow,
+  CircuitBoard
 } from 'lucide-react';
-import { ImageFallback } from './ImageFallback';
 
 export function Hero() {
   const [heroData, setHeroData] = useState<HeroType | null>(null);
@@ -101,7 +100,7 @@ export function Hero() {
     <section className="relative min-h-screen bg-gray-900 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] -z-10" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] -z-10 animate-grid-flow" />
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900/0 via-gray-900/50 to-gray-900" />
       </div>
 
@@ -115,41 +114,49 @@ export function Hero() {
           {/* Terminal Window with Typing Effect */}
           <motion.div 
             variants={itemVariants}
-            className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700 max-w-4xl"
+            className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700 shadow-2xl shadow-purple-500/5 hover:shadow-purple-500/10 transition-all duration-500 max-w-4xl transform hover:-translate-y-1"
           >
-            <div className="px-4 py-2 bg-gray-900 border-b border-gray-700 flex items-center justify-between">
+            <div className="px-4 py-2 bg-gray-900/90 border-b border-gray-700 flex items-center justify-between backdrop-blur-md">
               <div className="flex space-x-2">
-                <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors"></div>
               </div>
-              <span className="text-xs text-gray-400">portfolio.sh</span>
+              <span className="text-xs text-gray-400 font-mono">portfolio.sh</span>
             </div>
             <div className="p-6 font-mono space-y-4">
               <div className="flex items-center space-x-2 text-green-400">
                 <Terminal className="w-4 h-4" />
                 <span className="text-gray-400">$</span>
-                <span>{typedText}</span>
-                <span className="animate-pulse">_</span>
+                <span className="text-green-300">{typedText}</span>
+                <span className="w-2 h-5 bg-green-400 animate-pulse rounded-sm shadow-lg shadow-green-400/50">_</span>
               </div>
               
-              <div className="text-gray-300">
-                <span className="text-blue-400">class</span> <span className="text-yellow-400">Developer</span> {'{'}
-                <div className="pl-4 space-y-1">
-                  <div><span className="text-purple-400">name:</span> <span className="text-green-300">"{heroData?.name || 'Pragya'}"</span></div>
-                  <div><span className="text-purple-400">role:</span> <span className="text-green-300">"Software Engineer & Former Architect"</span></div>
-                  <div>
-                    <span className="text-purple-400">skills:</span> [
-                    <span className="text-green-300">"Frontend", "Backend", "Cloud", "Architecture"</span>]
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 }}
+                className="text-gray-300 p-4 rounded-lg bg-gray-900/50 border border-gray-700/50"
+              >
+                <span className="text-blue-400">class</span> <span className="text-yellow-400 font-bold">Developer</span> {'{'}
+                <div className="pl-4 space-y-2">
+                  <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <span className="text-purple-400">name:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{heroData?.name || 'Pragya'}"</span>
                   </div>
-                  <div><span className="text-purple-400">status:</span> <span className="text-green-300">"Available for Projects"</span></div>
+                  <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <span className="text-purple-400">role:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"Software Engineer & Former Architect"</span>
+                  </div>
+                  <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <span className="text-purple-400">skills:</span> [
+                    <span className="text-green-300 group-hover:text-green-400 transition-colors">"Frontend", "Backend", "Cloud", "Architecture"</span>]
+                  </div>
+                  <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <span className="text-purple-400">status:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"Available for Projects"</span>
+                  </div>
                 </div>
                 {'}'}
-              </div>
+              </motion.div>
 
-              <div className="text-gray-400">
-                <span className="text-gray-500">// Type 'help' for available commands</span>
-              </div>
             </div>
           </motion.div>
 
@@ -204,7 +211,7 @@ export function Hero() {
           {stats && (
             <motion.div 
               variants={itemVariants}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-8 border-t border-gray-800"
+              className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-gray-800/50"
             >
               {[
                 { icon: <Code className="w-5 h-5" />, label: 'Projects', value: stats.projects },
@@ -215,12 +222,12 @@ export function Hero() {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="text-center p-4"
+                  className="text-center p-6 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 hover:border-gray-700/50 transition-colors"
                 >
-                  <div className="text-green-400 flex justify-center mb-2">
+                  <div className="text-green-400 flex justify-center mb-3">
                     {stat.icon}
                   </div>
-                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-2xl font-bold text-white mb-2">{stat.value}</div>
                   <div className="text-gray-400 text-sm">{stat.label}</div>
                 </motion.div>
               ))}
@@ -228,18 +235,7 @@ export function Hero() {
           )}
         </motion.div>
 
-        {/* Scroll Indicator */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="absolute left-1/2 -translate-x-1/2 bottom-8 hidden md:flex flex-col items-center"
-        >
-          <div className="w-1 h-16 rounded-full bg-gradient-to-b from-green-500/20 to-green-500/0 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-green-400/60 transform -translate-y-1/2 animate-scroll"></div>
-          </div>
-          <span className="text-gray-400 text-sm mt-4 font-mono">scroll.down()</span>
-        </motion.div>
+       
       </div>
     </section>
   );

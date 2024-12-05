@@ -43,6 +43,19 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  @keyframes grid-flow {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(4rem);
+    }
+  }
+
+  .animate-grid-flow {
+    animation: grid-flow 20s linear infinite;
+  }
 }
 
 @layer components {
