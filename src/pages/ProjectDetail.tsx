@@ -15,13 +15,26 @@ export function ProjectDetail() {
 
   useEffect(() => {
     async function fetchProject() {
-      if (!id) return;
+      if (!id) {
+        setError('Project ID is missing');
+        setLoading(false);
+        return;
+      }
+
       try {
+        setLoading(true);
         const data = await getProject(id);
+        
+        if (!data) {
+          setError('Project not found');
+          return;
+        }
+
+        console.log('Fetched project:', data); // Debug log
         setProject(data);
       } catch (error) {
         console.error('Error fetching project:', error);
-        setError('Failed to load project details');
+        setError('Failed to load project details. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -30,6 +43,13 @@ export function ProjectDetail() {
   }, [id]);
 
   const handleImageClick = (index: number) => {
+    if (!project) return;
+    
+    // If index is -1, use cover image, otherwise use gallery image
+    const imageUrl = index === -1 ? project.coverImage : project.gallery[index].url;
+    const imageCaption = index === -1 ? project.title : project.gallery[index].caption;
+    
+    console.log('Opening image:', { url: imageUrl, caption: imageCaption });
     setActiveImageIndex(index);
     setIsImageModalOpen(true);
   };
@@ -46,8 +66,11 @@ export function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white font-mono flex items-center justify-center">
-        <div className="animate-pulse text-green-400">Loading project data...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-8 h-8 border-4 border-gray-700 border-t-green-400 rounded-full animate-spin"></div>
+          <p className="text-gray-400 font-mono">Loading project data...</p>
+        </div>
       </div>
     );
   }
@@ -55,7 +78,16 @@ export function ProjectDetail() {
   if (error || !project) {
     return (
       <div className="min-h-screen bg-gray-900 text-white font-mono flex items-center justify-center">
-        <div className="text-red-400">{error || 'Project not found'}</div>
+        <div className="text-center space-y-4">
+          <p className="text-red-400">{error || 'Project not found'}</p>
+          <Link
+            to="/projects"
+            className="inline-flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Projects</span>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -112,13 +144,14 @@ export function ProjectDetail() {
           <div className="lg:col-span-2 space-y-8">
             {/* Cover Image */}
             <div 
-              className="border border-gray-800 rounded-lg overflow-hidden cursor-pointer"
-              onClick={() => handleImageClick(-1)} // -1 indicates cover image
+              className="border border-gray-800 rounded-lg overflow-hidden cursor-pointer bg-gray-800"
+              onClick={() => handleImageClick(-1)}
             >
               <ImageFallback
                 src={project.coverImage}
                 alt={project.title}
-                className="w-full h-auto object-cover"
+                className="w-full h-[400px] object-cover"
+                fallbackClassName="w-full h-[400px]"
               />
             </div>
 
@@ -153,20 +186,21 @@ export function ProjectDetail() {
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {project.gallery.map((image, index) => (
+                  {project.gallery?.map((image, index) => (
                     <div 
                       key={index}
-                      className="group relative border border-gray-800 rounded-lg overflow-hidden cursor-pointer"
+                      className="group relative border border-gray-800 rounded-lg overflow-hidden cursor-pointer bg-gray-800"
                       onClick={() => handleImageClick(index)}
                     >
                       <ImageFallback
                         src={image.url}
-                        alt={image.caption}
+                        alt={image.caption || `Gallery image ${index + 1}`}
                         className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                        fallbackClassName="w-full h-48"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="absolute bottom-0 left-0 right-0 p-4">
-                          <p className="text-sm text-white">{image.caption}</p>
+                          <p className="text-sm text-white">{image.caption || `Image ${index + 1}`}</p>
                         </div>
                       </div>
                     </div>

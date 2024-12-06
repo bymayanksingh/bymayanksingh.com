@@ -168,13 +168,27 @@ export const getProjects = async (): Promise<Project[]> => {
 
 export const getProject = async (id: string): Promise<Project | null> => {
   try {
-    const docRef = doc(db, 'projects', id);
+    //console.log('Fetching project with ID:', id);
+    const projectsRef = collection(db, 'projects');
+    const q = query(projectsRef, where('id', '==', id.toLowerCase()));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      const data = { id: doc.id, ...doc.data() } as Project;
+      //console.log('Found project:', data);
+      return data;
+    }
+    
+    // If not found by id field, try getting directly by document ID
+    const docRef = doc(db, 'projects', id.toLowerCase());
     const docSnap = await getDoc(docRef);
     
     if (docSnap.exists()) {
       return { id: docSnap.id, ...docSnap.data() } as Project;
     }
     
+    //console.log('No project found with ID:', id);
     return null;
   } catch (error) {
     console.error('Error fetching project:', error);

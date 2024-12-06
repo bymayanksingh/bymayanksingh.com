@@ -32,32 +32,19 @@ export function ImageFallback({
   const processImageUrl = (url: string) => {
     if (!url) return url;
 
-    // Handle Google Drive URLs
-    if (url.includes('drive.google.com') || url.includes('drive.usercontent.google.com')) {
-      // Extract the file ID
-      let fileId = '';
-      
-      // Match ID from various Google Drive URL formats
-      const patterns = [
-        /\/file\/d\/([^/]+)/,  // matches /file/d/{fileId}
-        /id=([^&]+)/,          // matches id={fileId}
-        /\/d\/([^/]+)/         // matches /d/{fileId}
-      ];
+    // If it's already a direct Google Drive URL, return as is
+    if (url.includes('lh3.googleusercontent.com')) {
+      return url;
+    }
 
-      for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match && match[1]) {
-          fileId = match[1];
-          break;
-        }
-      }
-
-      if (fileId) {
-        // Use the direct image proxy URL
-        return `https://lh3.googleusercontent.com/d/${fileId}`;
+    // If it's a Google Drive export URL, convert to direct URL
+    if (url.includes('drive.google.com') && url.includes('export=view')) {
+      const idMatch = url.match(/id=([^&]+)/);
+      if (idMatch && idMatch[1]) {
+        return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
       }
     }
-    
+
     return url;
   };
 
@@ -130,6 +117,7 @@ export function ImageFallback({
         className={`${className} ${loading ? 'hidden' : ''}`}
         onError={handleError}
         onLoad={handleLoad}
+        loading="lazy"
         referrerPolicy="no-referrer"
         {...props}
       />

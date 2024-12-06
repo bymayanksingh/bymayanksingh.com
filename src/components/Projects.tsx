@@ -3,21 +3,46 @@ import { Link } from 'react-router-dom';
 import { Terminal, Folder, Code, GitBranch, ArrowRight } from 'lucide-react';
 import { getProjects, type Project } from '../services/firebaseService';
 
+const getGoogleDriveDirectUrl = (url: string): string => {
+  if (!url) return '';
+  // Check if it's already a Google Drive export URL
+  if (url.includes('export=view')) {
+    return url;
+  }
+  // Extract file ID from various Google Drive URL formats
+  const fileId = url.match(/[-\w]{25,}/);
+  if (fileId) {
+    return `https://drive.google.com/uc?export=view&id=${fileId[0]}`;
+  }
+  return url;
+};
+
 export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const data = await getProjects();
-        setProjects(data);
-        // Extract unique categories
-        const uniqueCategories = ['all', ...new Set(data.map(project => project.category))];
-        setCategories(uniqueCategories);
+        setLoading(true);
+        setError(null);
+        const allProjects = await getProjects();
+        
+        // Filter only featured projects
+        const featuredProjects = allProjects.filter(project => project.featured);
+        
+        // Extract unique categories from featured projects only
+        const uniqueCategories = Array.from(
+          new Set(featuredProjects.map(project => project.category))
+        ).filter(Boolean); // Remove any undefined/null categories
+        
+        setProjects(featuredProjects);
+        setCategories(['all', ...uniqueCategories]);
+        
+        console.log('Fetched featured projects:', featuredProjects.length);
       } catch (error) {
         console.error('Error fetching projects:', error);
         setError('Failed to load projects');
@@ -28,16 +53,36 @@ export function Projects() {
     fetchProjects();
   }, []);
 
-  const filteredProjects = projects.filter(project => 
-    selectedCategory === 'all' || project.category === selectedCategory
-  );
+  // Filter projects based on selected category
+  const filteredProjects = selectedCategory === 'all'
+    ? projects
+    : projects.filter(project => project.category === selectedCategory);
 
   if (loading) {
-    return <div className="py-20 text-center">Loading...</div>;
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-8 h-8 border-4 border-gray-200 border-t-gray-700 rounded-full animate-spin"></div>
+          <p className="text-gray-600">Loading projects...</p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="py-20 text-center">{error}</div>;
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-black/80 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -95,18 +140,18 @@ export function Projects() {
                 </div>
 
                 {/* Project Image */}
-                <div className="relative aspect-video">
+                <div className="relative aspect-video bg-gray-800">
                   <img
-                    src={project.image}
+                    src={project.coverImage}
                     alt={project.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    onError={(e) => {
+                      console.error(`Error loading image for project: ${project.title}`, project.coverImage);
+                      e.currentTarget.src = '/placeholder-project.jpg';
+                      e.currentTarget.classList.add('opacity-50');
+                    }}
                   />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <div className="text-green-400 flex items-center space-x-2">
-                      <span>View Project</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </div>
                 </div>
 
                 {/* Project Info */}
