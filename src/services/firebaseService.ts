@@ -1,8 +1,10 @@
 import { collection, getDocs, doc, getDoc, query, where, addDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../config/firebase';
 
 export interface Project {
   id: string;
+  slug: string;
   title: string;
   category: string;
   location: string;
@@ -143,6 +145,86 @@ export interface Award {
   order: number;
 }
 
+// Helper function to get Google Drive URL
+const getGoogleDriveUrl = (url: string): string => {
+  if (!url) return '';
+
+  try {
+    // If it's already a direct preview URL, return as is
+    if (url.includes('drive.google.com/file/d/')) {
+      return url;
+    }
+
+    // Extract file ID from various Google Drive URL formats
+    let fileId = '';
+
+    // Handle various URL formats
+    if (url.includes('id=')) {
+      // Handle export and usercontent URLs
+      const idMatch = url.match(/id=([^&]+)/);
+      fileId = idMatch ? idMatch[1] : '';
+    } else if (url.includes('/file/d/')) {
+      // Handle /file/d/ format
+      const idMatch = url.match(/\/file\/d\/([^/]+)/);
+      fileId = idMatch ? idMatch[1] : '';
+    } else {
+      // Handle other formats
+      const idMatch = url.match(/[-\w]{25,}/);
+      fileId = idMatch ? idMatch[0] : '';
+    }
+
+    if (!fileId) {
+      console.error('Could not extract file ID from URL:', url);
+      return url;
+    }
+
+    // Use the preview URL format which has better browser support
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  } catch (error) {
+    console.error('Error processing Google Drive URL:', error);
+    return url;
+  }
+};
+
+// Helper function to get storage URL
+const getStorageUrl = async (path: string): Promise<string> => {
+  if (!path) return '';
+  
+  try {
+    // Handle Google Drive URLs
+    if (path.includes('drive.google.com') || path.includes('drive.usercontent.google.com')) {
+      return getGoogleDriveUrl(path);
+    }
+    
+    // Handle direct URLs (including lh3.googleusercontent.com)
+    if (path.startsWith('http') || path.startsWith('https')) {
+      return path;
+    }
+    
+    // Handle Firebase Storage paths
+    const storageRef = ref(storage, path);
+    const url = await getDownloadURL(storageRef);
+    return url;
+  } catch (error) {
+    console.error('Error getting download URL:', error);
+    console.error('Path:', path);
+    return '';
+  }
+};
+
+// Helper function to create a URL-friendly slug
+const createSlug = (text: string | undefined | null, id: string): string => {
+  if (!text) {
+    console.warn(`Creating fallback slug for project ${id} due to missing title`);
+    return `project-${id.toLowerCase().slice(0, 8)}`;
+  }
+  
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+};
+
 // Hero
 export const getHero = async (): Promise<Hero | null> => {
   try {
@@ -158,40 +240,185 @@ export const getHero = async (): Promise<Hero | null> => {
 // Projects
 export const getProjects = async (): Promise<Project[]> => {
   try {
-    const snapshot = await getDocs(collection(db, 'projects'));
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Project);
+    const projectsRef = collection(db, 'projects');
+    const querySnapshot = await getDocs(projectsRef);
+    
+    console.log('All project IDs in database:', querySnapshot.docs.map(doc => doc.id));
+    
+    const projects = await Promise.all(
+      querySnapshot.docs.map(async (doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        
+        // Generate slug from title or use fallback
+        const slug = data.slug || createSlug(data.title, id);
+        
+        // Process coverImage and gallery URLs
+        const coverImage = await getStorageUrl(data.coverImage || '');
+        const gallery = data.gallery ? await Promise.all(
+          data.gallery.map(async (item: { url: string; caption: string }) => ({
+            url: await getStorageUrl(item.url || ''),
+            caption: item.caption || ''
+          }))
+        ) : [];
+
+        // Construct project with all required fields and fallbacks
+        const project = {
+          id,
+          title: data.title || `Project ${id.slice(0, 8)}`,
+          slug,
+          description: data.description || '',
+          coverImage,
+          gallery,
+          category: data.category || 'Uncategorized',
+          client: data.client || '',
+          location: data.location || '',
+          area: data.area || '',
+          status: data.status || '',
+          year: data.year || '',
+          featured: !!data.featured,
+          details: data.details || [],
+          ...data
+        } as Project;
+
+        console.log(`Processed project ${id}:`, { id: project.id, title: project.title, slug: project.slug });
+        return project;
+      })
+    );
+
+    return projects;
   } catch (error) {
     console.error('Error fetching projects:', error);
     return [];
   }
 };
 
-export const getProject = async (id: string): Promise<Project | null> => {
+export const getProject = async (idOrSlug: string): Promise<Project | null> => {
   try {
-    //console.log('Fetching project with ID:', id);
-    const projectsRef = collection(db, 'projects');
-    const q = query(projectsRef, where('id', '==', id.toLowerCase()));
-    const querySnapshot = await getDocs(q);
+    console.log('Fetching project with ID/slug:', idOrSlug);
     
-    if (!querySnapshot.empty) {
-      const doc = querySnapshot.docs[0];
-      const data = { id: doc.id, ...doc.data() } as Project;
-      //console.log('Found project:', data);
-      return data;
+    // First try to get the project directly by ID
+    let docRef = doc(db, 'projects', idOrSlug);
+    let docSnap = await getDoc(docRef);
+    
+    // If not found by ID, try to find by slug
+    if (!docSnap.exists()) {
+      console.log('Project not found by ID, trying slug...');
+      const projectsRef = collection(db, 'projects');
+      const q = query(projectsRef, where('slug', '==', idOrSlug));
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        // Try to find by generated slug
+        const allProjects = await getProjects();
+        const projectBySlug = allProjects.find(p => p.slug === idOrSlug);
+        
+        if (!projectBySlug) {
+          console.log('Project not found by slug either:', idOrSlug);
+          return null;
+        }
+        
+        return projectBySlug;
+      }
+      
+      docSnap = querySnapshot.docs[0];
     }
-    
-    // If not found by id field, try getting directly by document ID
-    const docRef = doc(db, 'projects', id.toLowerCase());
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() } as Project;
-    }
-    
-    //console.log('No project found with ID:', id);
-    return null;
+
+    const data = docSnap.data();
+    const id = docSnap.id;
+
+    // Generate slug if not present
+    const slug = data.slug || createSlug(data.title, id);
+
+    // Process images
+    const coverImage = await getStorageUrl(data.coverImage || '');
+    const gallery = data.gallery ? await Promise.all(
+      data.gallery.map(async (item: { url: string; caption: string }) => ({
+        url: await getStorageUrl(item.url || ''),
+        caption: item.caption || ''
+      }))
+    ) : [];
+
+    // Construct project with all required fields and fallbacks
+    const project = {
+      id,
+      title: data.title || `Project ${id.slice(0, 8)}`,
+      slug,
+      description: data.description || '',
+      coverImage,
+      gallery,
+      category: data.category || 'Uncategorized',
+      client: data.client || '',
+      location: data.location || '',
+      area: data.area || '',
+      status: data.status || '',
+      year: data.year || '',
+      featured: !!data.featured,
+      details: data.details || [],
+      ...data
+    } as Project;
+
+    console.log('Successfully processed project:', { id: project.id, title: project.title, slug: project.slug });
+    return project;
   } catch (error) {
     console.error('Error fetching project:', error);
+    console.error('Project ID/slug:', idOrSlug);
+    return null;
+  }
+};
+
+export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
+  try {
+    console.log('Fetching project with slug:', slug);
+    
+    const projectsRef = collection(db, 'projects');
+    const q = query(projectsRef, where('slug', '==', slug));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      console.log('Project not found by slug:', slug);
+      return null;
+    }
+    
+    const docSnap = querySnapshot.docs[0];
+    const data = docSnap.data();
+    console.log('Raw project data:', data);
+
+    // Process coverImage
+    const coverImage = await getStorageUrl(data.coverImage || '');
+    console.log('Processed cover image:', coverImage);
+
+    // Process gallery images
+    const gallery = data.gallery ? await Promise.all(
+      data.gallery.map(async (item: { url: string; caption: string }) => ({
+        url: await getStorageUrl(item.url || ''),
+        caption: item.caption || ''
+      }))
+    ) : [];
+    console.log('Processed gallery:', gallery);
+
+    // Convert year to number if it's a string
+    const year = typeof data.year === 'string' ? parseInt(data.year) : data.year;
+
+    // Generate slug from title if not present
+    const projectSlug = data.slug || createSlug(data.title, docSnap.id);
+
+    // Construct the project object
+    const project = {
+      id: docSnap.id,
+      ...data,
+      title: data.title || 'Untitled Project',
+      slug: projectSlug,
+      year,
+      coverImage,
+      gallery
+    } as Project;
+
+    console.log('Final processed project:', project);
+    return project;
+  } catch (error) {
+    console.error('Error fetching project:', error);
+    console.error('Project slug:', slug);
     return null;
   }
 };

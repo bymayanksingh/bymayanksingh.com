@@ -153,7 +153,7 @@ export function ProjectsPage() {
           {filteredProjects.map((project) => (
             <Link
               key={project.id}
-              to={`/project/${project.id}`}
+              to={`/projects/${project.id}`}
               className="group"
             >
               {/* Project Card */}
