@@ -50,7 +50,7 @@ export function Testimonials() {
   }
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-gray-900">
+    <section className="bg-gray-950 py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">

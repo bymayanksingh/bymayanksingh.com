@@ -84,7 +84,7 @@ export function Contact() {
 
   if (status.type === 'loading') {
     return (
-      <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
+      <div className="min-h-screen bg-gray-950 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
           <Command className="w-5 h-5 animate-spin" />
           <span>Sending message...</span>
@@ -94,7 +94,7 @@ export function Contact() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 font-mono py-24">
+    <div className="min-h-screen bg-gray-950 font-mono py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <motion.div 

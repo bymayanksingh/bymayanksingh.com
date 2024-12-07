@@ -67,16 +67,22 @@ export function ImageFallback({ src, alt, className = '', fallbackClassName = ''
   }
 
   return (
-    <img
-      src={imgSrc}
-      alt={alt}
-      className={className}
-      onError={handleError}
-      onLoad={() => {
-        setLoading(false);
-        setError(false);
-      }}
-      style={{ opacity: loading ? 0 : 1 }}
-    />
+    <div className="relative w-full h-full bg-gray-900">
+      <img
+        src={imgSrc}
+        alt={alt}
+        className={`${className} ${loading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        onError={handleError}
+        onLoad={() => {
+          setLoading(false);
+          setError(false);
+        }}
+      />
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+          <div className="w-8 h-8 border-4 border-gray-800 border-t-green-400 rounded-full animate-spin"></div>
+        </div>
+      )}
+    </div>
   );
 }

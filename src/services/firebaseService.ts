@@ -196,7 +196,7 @@ const getStorageUrl = async (path: string): Promise<string> => {
       return getGoogleDriveUrl(path);
     }
     
-    // Handle direct URLs (including lh3.googleusercontent.com)
+    // Handle direct URLs (including lh3.googleusercontent.com and firebase storage URLs)
     if (path.startsWith('http') || path.startsWith('https')) {
       return path;
     }
@@ -476,7 +476,13 @@ export const getAbout = async (): Promise<About | null> => {
     
     if (!aboutSnapshot.empty) {
       const aboutDoc = aboutSnapshot.docs[0];
-      return { id: aboutDoc.id, ...aboutDoc.data() } as About;
+      const data = aboutDoc.data();
+      const image = data.image ? await getStorageUrl(data.image) : '';
+      return { 
+        id: aboutDoc.id, 
+        ...data,
+        image
+      } as About;
     }
     
     return null;
@@ -517,8 +523,29 @@ export const getStats = async (): Promise<Stats | null> => {
 // Certificates
 export const getCertificates = async (): Promise<Certificate[]> => {
   try {
-    const snapshot = await getDocs(collection(db, 'certificates'));
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Certificate);
+    const certificatesRef = collection(db, 'certificates');
+    const querySnapshot = await getDocs(certificatesRef);
+    const certificates = await Promise.all(querySnapshot.docs.map(async doc => {
+      const data = doc.data();
+      // Process the image URL through getStorageUrl
+      let imageUrl = '';
+      if (data.image) {
+        try {
+          imageUrl = await getStorageUrl(data.image);
+          console.log('Certificate image URL processed:', imageUrl);
+        } catch (error) {
+          console.error('Error processing certificate image:', error);
+        }
+      }
+      return {
+        id: doc.id,
+        ...data,
+        image: imageUrl
+      };
+    })) as Certificate[];
+    
+    // Sort by year in descending order
+    return certificates.sort((a, b) => parseInt(b.year) - parseInt(a.year));
   } catch (error) {
     console.error('Error fetching certificates:', error);
     return [];
@@ -560,9 +587,14 @@ export const getAwards = async (): Promise<Award[]> => {
   try {
     const awardsRef = collection(db, 'awards');
     const querySnapshot = await getDocs(awardsRef);
-    const awards = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    const awards = await Promise.all(querySnapshot.docs.map(async doc => {
+      const data = doc.data();
+      const image = data.image ? await getStorageUrl(data.image) : '';
+      return {
+        id: doc.id,
+        ...data,
+        image
+      };
     })) as Award[];
     
     // Sort by order field

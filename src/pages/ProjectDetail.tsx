@@ -49,7 +49,7 @@ export function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white font-mono">
+      <div className="min-h-screen bg-gray-950 text-white font-mono">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="animate-pulse space-y-8">
             <div className="h-8 bg-gray-800 rounded w-1/4"></div>
@@ -66,7 +66,7 @@ export function ProjectDetail() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white font-mono">
+      <div className="min-h-screen bg-gray-950 text-white font-mono">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <Link to="/projects" className="inline-flex items-center text-green-400 hover:text-green-300 mb-8">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -101,7 +101,7 @@ export function ProjectDetail() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white font-mono">
+    <div className="min-h-screen bg-gray-950 text-white font-mono">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Back Button */}
         <Link to="/projects" className="inline-flex items-center text-green-400 hover:text-green-300 mb-8">

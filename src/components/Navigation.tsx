@@ -83,7 +83,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
       <nav 
         className={`transition-all duration-500 w-full ${
           isScrolled 
-            ? 'bg-gray-900/95 backdrop-blur-md shadow-lg py-2 sm:py-3' 
+            ? 'bg-gray-900/90 backdrop-blur-md border-b border-gray-800/50 shadow-lg shadow-gray-950/50 py-2 sm:py-3' 
             : 'bg-transparent py-3 sm:py-5'
         }`}
       >
@@ -92,12 +92,12 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             {/* Logo/Brand */}
             <Link 
               to="/" 
-              className="relative z-50 text-white hover:text-green-400 transition-colors"
+              className="relative z-50 text-white hover:text-green-400 transition-colors duration-300 group"
               onClick={() => isMenuOpen && setIsMenuOpen(false)}
             >
               <div className="flex items-center space-x-2">
-                <span className="text-green-400 text-sm sm:text-base">~/</span>
-                <span className="font-bold text-sm sm:text-base">{'@'}bymayanksingh{'>'}</span>
+                <span className="text-green-400 text-sm sm:text-base group-hover:text-green-300 transition-colors duration-300">~/</span>
+                <span className="font-bold text-sm sm:text-base group-hover:text-green-400 transition-colors duration-300">{'@'}bymayanksingh{'>'}</span>
               </div>
             </Link>
 
@@ -107,18 +107,19 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-4 py-2 rounded-lg text-sm transition-all duration-300 ${
+                  aria-label={item.ariaLabel}
+                  className={`px-4 py-2 rounded-md text-sm transition-all duration-300 ${
                     location.pathname === item.path
-                      ? 'bg-green-600/20 text-green-400'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                      ? 'text-green-400 bg-green-400/10 hover:bg-green-400/20'
+                      : 'text-gray-400 hover:text-green-400 hover:bg-gray-800/50'
                   }`}
                 >
-                  <span className="text-green-400">./</span>{item.label}
+                  {item.label}
                 </Link>
               ))}
               <Link
                 to="/contact"
-                className="ml-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-black font-medium rounded-lg text-sm transition-all duration-300 flex items-center space-x-2"
+                className="ml-2 px-4 py-2 bg-green-400/10 text-green-400 rounded-md text-sm hover:bg-green-400/20 transition-all duration-300 flex items-center space-x-2"
               >
                 <span>./Let's Talk</span>
               </Link>
@@ -127,19 +128,31 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative z-50 md:hidden w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white focus:outline-none"
-              aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+              className="md:hidden relative z-50 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 transition-colors duration-300"
+              aria-label="Toggle menu"
             >
-              <div className="w-5 h-4 flex flex-col justify-between">
-                <div className={`w-5 h-0.5 bg-current transform transition-all duration-300 ${
-                  isMenuOpen ? 'rotate-45 translate-y-1.5' : ''
-                }`} />
-                <div className={`w-5 h-0.5 bg-current transition-opacity duration-300 ${
-                  isMenuOpen ? 'opacity-0' : ''
-                }`} />
-                <div className={`w-5 h-0.5 bg-current transform transition-all duration-300 ${
-                  isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''
-                }`} />
+              <div className="relative w-5 h-4">
+                <span 
+                  className={`absolute w-5 h-0.5 transform transition-all duration-300 ${
+                    isMenuOpen 
+                      ? 'bg-green-400 rotate-45 top-2' 
+                      : 'bg-gray-400 top-0'
+                  }`} 
+                />
+                <span 
+                  className={`absolute w-5 h-0.5 top-2 transition-all duration-300 ${
+                    isMenuOpen 
+                      ? 'opacity-0 bg-green-400' 
+                      : 'opacity-100 bg-gray-400'
+                  }`} 
+                />
+                <span 
+                  className={`absolute w-5 h-0.5 transform transition-all duration-300 ${
+                    isMenuOpen 
+                      ? 'bg-green-400 -rotate-45 top-2' 
+                      : 'bg-gray-400 top-4'
+                  }`} 
+                />
               </div>
             </button>
           </div>

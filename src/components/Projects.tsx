@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Folder, Code, GitBranch } from 'lucide-react';
+import { Terminal, Folder, Code, GitBranch, ArrowRight } from 'lucide-react';
 import { getProjects, type Project } from '../services/firebaseService';
 import { ImageFallback } from '../components/ImageFallback';
 
@@ -106,47 +106,71 @@ export function Projects({ showAll = false }: ProjectsProps) {
   }
 
   return (
-    <section className={`bg-gray-900 ${!showAll ? 'py-16' : 'pb-16'} font-mono`}>
+    <section className={`bg-gray-950 ${!showAll ? 'py-16' : ''} font-mono`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {!showAll && (
-          <div className="mb-8">
+          <div className="mb-12">
             <div className="flex items-center space-x-2 mb-4">
               <Terminal className="w-5 h-5 text-green-400" />
-              <h2 className="text-2xl text-white">~/projects</h2>
+              <h2 className="text-2xl text-green-400">~/featured-projects</h2>
             </div>
-            <div className="flex items-center space-x-2 text-gray-400 text-sm">
+            <div className="flex items-center space-x-2 text-gray-400 text-sm pl-7">
               <Code className="w-4 h-4" />
-              <span>git branch --list</span>
+              <span>git checkout featured</span>
             </div>
           </div>
         )}
 
         {/* Category Filter - Git Branch Style */}
-        <div className="mb-8 overflow-x-auto">
-          <div className="flex space-x-4 pb-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-green-600/20 text-green-400 border border-green-400/30'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                }`}
-              >
-                <GitBranch className="w-4 h-4" />
-                <span>{category}</span>
-              </button>
-            ))}
+        {showAll && (
+          <div className="mb-8 bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
+            {/* Terminal Header */}
+            <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                </div>
+                <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
+                  <GitBranch className="w-3.5 h-3.5" />
+                  <span>git checkout projects</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Categories Content */}
+            <div className="p-4">
+              <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                <span className="text-green-400/90">❯</span>
+                <span>categories.sh</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-all duration-200 ${
+                      selectedCategory === category
+                        ? 'bg-green-400/10 text-green-400 border border-green-400/30'
+                        : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 border border-gray-800/50'
+                    }`}
+                  >
+                    <GitBranch className="w-3.5 h-3.5" />
+                    <span>{category}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((project) => (
             <Link
               key={project.id}
               to={`/projects/${project.slug}`}
-              className="group"
+              className="group block"
               onClick={() => {
                 console.log('Navigating to project:', {
                   id: project.id,
@@ -156,54 +180,89 @@ export function Projects({ showAll = false }: ProjectsProps) {
                 });
               }}
             >
-              {/* Project Card - Code Editor Style */}
-              <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-green-400/50 transition-colors">
-                {/* Window Controls */}
-                <div className="px-4 py-2 bg-gray-900 border-b border-gray-700 flex items-center justify-between">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+              {/* Project Card - Terminal Style */}
+              <div className="group bg-gray-950 rounded-lg overflow-hidden border border-gray-800/50 hover:border-green-400/30 transition-all duration-300 relative">
+                {/* Terminal Header */}
+                <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center justify-between backdrop-blur-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 group-hover:bg-red-400/90 transition-colors"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 group-hover:bg-yellow-400/90 transition-colors"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500/80 group-hover:bg-green-400/90 transition-colors"></div>
+                    </div>
+                    <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
+                      <Terminal className="w-3.5 h-3.5" />
+                      <span>project.sh</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 text-xs text-gray-400">
+                  <div className="flex items-center space-x-1.5 text-xs text-gray-500">
                     <span>{project.year}</span>
                     <span>•</span>
                     <span>{project.category}</span>
                   </div>
                 </div>
 
-                {/* Project Image */}
-                <div className="relative aspect-video bg-gray-800">
-                  <ImageFallback
-                    src={project.coverImage}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    fallbackClassName="w-full h-full"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-
-                {/* Project Info */}
-                <div className="p-4 space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Folder className="w-4 h-4 text-green-400" />
-                    <h3 className="text-white font-medium">{project.title}</h3>
+                {/* Project Content */}
+                <div className="relative aspect-video bg-gray-950">
+                  {/* Image Preview with Overlay */}
+                  <div className="absolute inset-0 bg-gray-950/80 group-hover:bg-gray-950/40 transition-colors duration-300">
+                    <ImageFallback
+                      src={project.coverImage}
+                      alt={project.title}
+                      className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-300"
+                      fallbackClassName="w-full h-full"
+                    />
                   </div>
-                  <p className="text-sm text-gray-400 line-clamp-2">
-                    {project.description}
-                  </p>
-                  {project.technologies && project.technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-2 text-xs text-gray-500">
-                      {project.technologies.map((tech, techIndex) => (
-                        <span 
-                          key={techIndex}
-                          className="px-2 py-1 bg-gray-900/50 rounded"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                  
+                  {/* Terminal-style Content */}
+                  <div className="absolute inset-0 p-5">
+                    <div className="h-full flex flex-col justify-between">
+                      {/* Project Info */}
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2 text-gray-400/80">
+                          <span className="text-green-400/90">❯</span>
+                          <span className="text-sm group-hover:text-green-400/90 transition-colors">cat README.md</span>
+                        </div>
+                        <h3 className="text-lg font-medium text-white/90 group-hover:text-green-400 transition-colors">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-gray-400/90 line-clamp-2">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      {/* Technologies */}
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-2 text-gray-400/80">
+                          <span className="text-green-400/90">❯</span>
+                          <span className="text-sm group-hover:text-green-400/90 transition-colors">ls tech/</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies?.slice(0, 3).map((tech, index) => (
+                            <span
+                              key={index}
+                              className="px-2 py-1 text-xs bg-gray-900/80 text-gray-400 rounded border border-gray-800/50 backdrop-blur-sm"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                          {project.technologies && project.technologies.length > 3 && (
+                            <span className="px-2 py-1 text-xs bg-gray-900/80 text-gray-400 rounded border border-gray-800/50 backdrop-blur-sm">
+                              +{project.technologies.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  </div>
+
+                  {/* View Details Button */}
+                  <div className="absolute bottom-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="flex items-center space-x-2 text-green-400/90 text-sm">
+                      <span>View Details</span>
+                      <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Link>

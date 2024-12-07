@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { Home } from './pages/Home';
 import { Projects } from './pages/Projects';
-import { ProjectsPage } from './pages/ProjectsPage';
 import { ProjectDetail } from './pages/ProjectDetail';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
@@ -37,13 +36,13 @@ export default function App() {
       <SEO />
       <StructuredData data={getArchitectSchema(about)} />
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen bg-gray-950 flex flex-col">
         <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/resume" element={<Resume />} />

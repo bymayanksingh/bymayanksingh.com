@@ -6,12 +6,13 @@ import { Testimonials } from '../components/Testimonials';
 
 export function Home() {
   return (
-    <>
+    <div className="bg-gray-950">
+      {/* Hero Section */}
       <Hero />
       <HomeAbout />
       <Timeline />
       <Projects />
       <Testimonials />
-    </>
+    </div>
   );
 }

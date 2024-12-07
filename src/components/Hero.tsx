@@ -97,11 +97,10 @@ export function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen bg-gray-900 overflow-hidden">
+    <section className="relative min-h-screen bg-gray-950 pt-16 pb-8 sm:pt-24 sm:pb-12 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] -z-10 animate-grid-flow" />
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900/0 via-gray-900/50 to-gray-900" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-32">

@@ -105,8 +105,8 @@ export function About() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 font-mono py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-950">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header Section */}
         <div className="mb-12">
           <div className="flex items-center space-x-2 mb-4">
@@ -133,10 +133,11 @@ export function About() {
                 <span className="text-xs text-gray-400">profile.jpg</span>
               </div>
               <div className="p-4">
-                <img
-                  src={aboutData?.image}
-                  alt="Profile"
+                <ImageFallback
+                  src={aboutData?.image || ''}
+                  alt={`${aboutData?.name || 'Profile'} photo`}
                   className="w-full h-auto rounded-lg"
+                  fallbackClassName="w-full aspect-square flex items-center justify-center bg-gray-700 rounded-lg"
                 />
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { Publication } from '../services/firebaseService';
-import { ExternalLink, BookOpen, Calendar, Users, Link2, FileText, Terminal } from 'lucide-react';
+import { BookOpen, Terminal, Calendar, Building2, Tag, ExternalLink, Users, Link2 } from 'lucide-react';
 import { ImageFallback } from './ImageFallback';
 
 interface PublicationsProps {
@@ -25,14 +25,7 @@ export function Publications({ publications }: PublicationsProps) {
                   <span className="text-sm font-mono">publication.md</span>
                 </div>
               </div>
-              <a
-                href={publication.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-green-400 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
+              <BookOpen className="w-4 h-4 text-green-400" />
             </div>
 
             {/* Content */}
@@ -47,7 +40,7 @@ export function Publications({ publications }: PublicationsProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
               </div>
 
-              {/* Title and Abstract */}
+              {/* Title and Details */}
               <div className="space-y-4">
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium text-white group-hover:text-green-400 transition-colors duration-300">
@@ -61,41 +54,60 @@ export function Publications({ publications }: PublicationsProps) {
                 {/* Metadata */}
                 <div className="grid grid-cols-1 gap-3 pt-4 border-t border-gray-700">
                   {/* Authors */}
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Users className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-400">{publication.authors.join(', ')}</span>
+                  <div className="flex items-start space-x-2 text-sm">
+                    <Users className="w-4 h-4 text-gray-500 mt-1 flex-shrink-0" />
+                    <span className="text-gray-400 line-clamp-2">{publication.authors.join(', ')}</span>
                   </div>
 
-                  {/* Journal & Year */}
+                  {/* Journal */}
                   <div className="flex items-center space-x-2 text-sm">
-                    <BookOpen className="w-4 h-4 text-gray-500" />
+                    <Building2 className="w-4 h-4 text-gray-500" />
                     <span className="text-gray-400">{publication.journal}</span>
-                    <span className="text-gray-600">•</span>
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-400">{publication.year}</span>
-                    </div>
                   </div>
 
-                  {/* DOI */}
+                  {/* Year */}
+                  <div className="flex items-center space-x-2 text-sm">
+                    <Calendar className="w-4 h-4 text-gray-500" />
+                    <span className="text-gray-400">{publication.year}</span>
+                  </div>
+
+                  {/* Category */}
+                  <div className="flex items-center space-x-2">
+                    <Tag className="w-4 h-4 text-gray-500" />
+                    <span className="px-2 py-1 text-xs font-mono text-green-400 bg-green-400/10 rounded-md border border-green-400/20">
+                      {publication.category.charAt(0).toUpperCase() + publication.category.slice(1)}
+                    </span>
+                  </div>
+
+                  {/* DOI Link */}
                   {publication.doi && (
                     <div className="flex items-center space-x-2 text-sm">
                       <Link2 className="w-4 h-4 text-gray-500" />
-                      <span className="text-gray-400">DOI: {publication.doi}</span>
+                      <a
+                        href={`https://doi.org/${publication.doi}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-green-400 transition-colors"
+                      >
+                        {publication.doi}
+                      </a>
                     </div>
                   )}
 
-                  {/* Read More Link */}
-                  <a
-                    href={publication.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 text-sm text-gray-400 hover:text-green-400 transition-colors mt-2 group/link"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>Read Publication</span>
-                    <ExternalLink className="w-3 h-3 opacity-0 -translate-y-1 group-hover/link:opacity-100 group-hover/link:translate-y-0 transition-all" />
-                  </a>
+                  {/* Link to Publication */}
+                  {publication.link && (
+                    <div className="flex items-center space-x-2 text-sm">
+                      <ExternalLink className="w-4 h-4 text-gray-500" />
+                      <a
+                        href={publication.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-green-400 transition-colors"
+                      >
+                        View Publication
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
