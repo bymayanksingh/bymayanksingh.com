@@ -191,6 +191,25 @@
   to { background-position: 200% center; }
 }
 
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Tech Pattern Animation */
+@keyframes patternMove {
+  0% {
+    background-position: 0 0, 0 0, center center;
+  }
+  100% {
+    background-position: 120px 0, -120px 0, center center;
+  }
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .space-y-6 {

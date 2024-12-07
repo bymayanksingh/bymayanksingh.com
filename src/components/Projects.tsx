@@ -204,13 +204,32 @@ export function Projects({ showAll = false }: ProjectsProps) {
 
                 {/* Project Content */}
                 <div className="relative aspect-video bg-gray-950">
-                  {/* Image Preview with Overlay */}
-                  <div className="absolute inset-0 bg-gray-950/80 group-hover:bg-gray-950/40 transition-colors duration-300">
-                    <ImageFallback
-                      src={project.coverImage}
-                      alt={project.title}
-                      className="w-full h-full object-cover mix-blend-luminosity group-hover:mix-blend-normal transition-all duration-300"
-                      fallbackClassName="w-full h-full"
+                  {/* Subtle Tech Pattern Background */}
+                  <div className="absolute inset-0 bg-gray-950 overflow-hidden">
+                    {/* Fine Grid */}
+                    <div className="absolute inset-0"
+                      style={{
+                        backgroundImage: `linear-gradient(to right, rgba(4, 120, 87, 0.02) 1px, transparent 1px)`,
+                        backgroundSize: '80px 100%',
+                        opacity: '0.2'
+                      }}
+                    />
+
+                    {/* Soft Gradient */}
+                    <div className="absolute inset-0 opacity-10"
+                      style={{
+                        background: 'radial-gradient(circle at 50% 50%, rgba(4, 120, 87, 0.1), transparent 70%)'
+                      }}
+                    />
+
+                    {/* Dark Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-950/98 via-gray-950/95 to-gray-950/98" />
+
+                    {/* Hover Effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700"
+                      style={{
+                        background: 'radial-gradient(circle at 50% 50%, rgba(4, 120, 87, 0.03), transparent 60%)'
+                      }}
                     />
                   </div>
                   

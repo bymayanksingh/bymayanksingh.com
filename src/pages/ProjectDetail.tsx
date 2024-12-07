@@ -214,6 +214,8 @@ export function ProjectDetail() {
         )}
       </div>
 
+      
+
       {/* Image Modal */}
       {project.gallery && (
         <ImageModal
