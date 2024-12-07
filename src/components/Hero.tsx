@@ -7,7 +7,7 @@ import { getStats } from '../services/dataService';
 import { 
   Code, Terminal, Database, ArrowRight, 
   Award, Building2, Users, Cpu, Network, Workflow,
-  CircuitBoard
+  CircuitBoard, Command
 } from 'lucide-react';
 
 export function Hero() {
@@ -74,11 +74,12 @@ export function Hero() {
     }
   };
 
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
-          <Terminal className="w-5 h-5 animate-spin" />
+          <Command className="w-5 h-5 animate-spin" />
           <span>Initializing system...</span>
         </div>
       </div>

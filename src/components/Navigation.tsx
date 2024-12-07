@@ -10,10 +10,10 @@ interface NavigationProps {
 }
 
 const navItems = [
-  { path: '/', label: 'Home', ariaLabel: 'Go to Home page' },
-  { path: '/projects', label: 'Projects', ariaLabel: 'View Engineering Projects' },
-  { path: '/about', label: 'About', ariaLabel: 'Learn more about the Engineer' },
-  { path: '/resume', label: 'Resume', ariaLabel: 'Learn more about me through my Resume' }
+  { path: '/', label: './Home', ariaLabel: 'Go to Home page' },
+  { path: '/projects', label: './Projects', ariaLabel: 'View Engineering Projects' },
+  { path: '/about', label: './About', ariaLabel: 'Learn more about the Engineer' },
+  { path: '/resume', label: './Resume', ariaLabel: 'Learn more about me through my Resume' }
 ];
 
 const menuVariants = {

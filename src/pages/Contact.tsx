@@ -94,7 +94,26 @@ export function Contact() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 font-mono py-16">
+    <div className="bg-gray-950 min-h-screen font-mono pt-10 sm:pt-10">
+      {/* Terminal Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
+          <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="flex space-x-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+              </div>
+              <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
+                <Terminal className="w-3.5 h-3.5" />
+                <span>./send-message.sh</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <motion.div 

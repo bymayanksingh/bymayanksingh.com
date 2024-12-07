@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Folder, Code, GitBranch, ArrowRight } from 'lucide-react';
+import { Terminal, Code, GitBranch, ArrowRight, Command } from 'lucide-react';
 import { getProjects, type Project } from '../services/firebaseService';
 import { ImageFallback } from '../components/ImageFallback';
 
@@ -70,10 +70,10 @@ export function Projects({ showAll = false }: ProjectsProps) {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-8 h-8 border-4 border-gray-700 border-t-green-400 rounded-full animate-spin"></div>
-          <p className="text-gray-400">Loading projects...</p>
+      <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
+        <div className="flex items-center space-x-3 text-green-400">
+          <Command className="w-5 h-5 animate-spin" />
+          <span>Loading projects...</span>
         </div>
       </div>
     );

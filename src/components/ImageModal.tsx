@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCw, Terminal, Maximize2, Minimize2 } from 'lucide-react';
 import { ImageFallback } from './ImageFallback';
 
@@ -89,8 +89,10 @@ export function ImageModal({
             <div className="flex space-x-2">
               <button
                 onClick={onClose}
-                className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors"
-              />
+                className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-600 transition-colors relative"
+              >
+                <X className="w-2 h-2 text-red-900 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              </button>
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
               <div className="w-3 h-3 rounded-full bg-green-500" />
             </div>

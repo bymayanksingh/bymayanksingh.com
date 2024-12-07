@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ImageIcon } from 'lucide-react';
 
 interface ImageFallbackProps {
@@ -13,7 +13,7 @@ export function ImageFallback({ src, alt, className = '', fallbackClassName = ''
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const MAX_RETRIES = 3;
+  const MAX_RETRIES = 1;
 
   useEffect(() => {
     setImgSrc(src);

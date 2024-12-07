@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getTestimonials } from '../services/firebaseService';
 import type { Testimonial } from '../services/firebaseService';
 import { motion } from 'framer-motion';
+import { Command } from 'lucide-react';
 
 export function Testimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -23,10 +24,14 @@ export function Testimonials() {
     fetchTestimonials();
   }, []);
 
+
   if (loading) {
     return (
-      <div className="py-20 text-center">
-        <div className="animate-pulse">Loading testimonials...</div>
+      <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
+        <div className="flex items-center space-x-3 text-green-400">
+          <Command className="w-5 h-5 animate-spin" />
+          <span>Loading testimonials...</span>
+        </div>
       </div>
     );
   }

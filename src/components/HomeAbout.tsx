@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Download, ArrowRight, Award, Building2, Users } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Command } from 'lucide-react';
 import { About, getAbout, Stats } from '../services/firebaseService';
 import { getStats } from '../services/dataService';
-import { ImageFallback } from './ImageFallback';
 import { motion } from 'framer-motion';
 
-const iconMap = {
-  Building2,
-  Award,
-  Users
-};
 
 export function HomeAbout() {
   const [about, setAbout] = useState<About | null>(null);
@@ -46,11 +39,12 @@ export function HomeAbout() {
 
   if (loading) {
     return (
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="animate-pulse">Loading...</div>
+      <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
+        <div className="flex items-center space-x-3 text-green-400">
+          <Command className="w-5 h-5 animate-spin" />
+          <span>Loading...</span>
         </div>
-      </section>
+      </div>
     );
   }
 

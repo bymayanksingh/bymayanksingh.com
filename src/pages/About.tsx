@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { 
-  Download, Mail, Phone, Linkedin, Award as AwardIcon, 
-  Building2Icon, BuildingIcon, Users, CheckCircle2, Command,
-  Terminal, Code, GitBranch, BookOpen, Trophy, GraduationCap
+  Mail, Phone, Linkedin, 
+  CheckCircle2, Command,
+  Terminal, Code, GitBranch, BookOpen, Trophy, GraduationCap, MapPin, Link
 } from 'lucide-react';
 import { ImageModal } from '../components/ImageModal';
 import { ImageFallback } from '../components/ImageFallback';
@@ -23,7 +23,7 @@ interface Certificate {
 }
 
 export function About() {
-  const [aboutData, setAboutData] = useState<AboutType | null>(null);
+  const [about, setAbout] = useState<AboutType | null>(null);
   const [skills, setSkills] = useState<string[]>([]);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
@@ -58,7 +58,7 @@ export function About() {
           getAwards()
         ]);
         
-        if (aboutResult) setAboutData(aboutResult);
+        if (aboutResult) setAbout(aboutResult);
         setSkills(skillsResult);
         setCertificates(certificatesResult);
         if (statsResult) setStats(statsResult);
@@ -105,98 +105,65 @@ export function About() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header Section */}
-        <div className="mb-12">
-          <div className="flex items-center space-x-2 mb-4">
-            <Terminal className="w-5 h-5 text-green-400" />
-            <h1 className="text-2xl text-white">~/about</h1>
-          </div>
-          <p className="text-gray-400 flex items-center space-x-2">
-            <Code className="w-4 h-4" />
-            <span>Software Engineer & Former Architect</span>
-          </p>
-        </div>
-
-        {/* Profile Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Profile Image */}
-          <div className="lg:col-span-1">
-            <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
-              <div className="px-4 py-2 bg-gray-900 border-b border-gray-700 flex items-center justify-between">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+    <div className="bg-gray-950 min-h-screen font-mono pt-10 sm:pt-10">
+      {/* Terminal Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
+          <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50">
+            {/* Terminal Top Bar */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
                 </div>
-                <span className="text-xs text-gray-400">profile.jpg</span>
-              </div>
-              <div className="p-4">
-                <ImageFallback
-                  src={aboutData?.image || ''}
-                  alt={`${aboutData?.name || 'Profile'} photo`}
-                  className="w-full h-auto rounded-lg"
-                  fallbackClassName="w-full aspect-square flex items-center justify-center bg-gray-700 rounded-lg"
-                />
+                <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
+                  <Terminal className="w-3.5 h-3.5" />
+                  <span>cat about.md</span>
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Bio & Contact */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Bio */}
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-              <div className="flex items-center space-x-2 mb-4">
-                <Terminal className="w-4 h-4 text-green-400" />
-                <h2 className="text-lg text-white">Bio</h2>
+            
+            {/* Bio and Contact Section */}
+            <div className="text-xs space-y-2 pb-2">
+              <div className="flex items-start space-x-2">
+                <Code className="w-3.5 h-3.5 text-green-400 mt-0.5" />
+                <span className="text-gray-400">{about?.title || 'Software Engineer'}</span>
               </div>
-              <div className="space-y-4 text-gray-300">
-                <p>{aboutData?.bio}</p>
+              <div className="flex items-start space-x-2">
+                <Mail className="w-3.5 h-3.5 text-green-400 mt-0.5" />
+                <a 
+                  href={`mailto:${about?.email}`} 
+                  className="text-gray-400 hover:text-green-400 transition-colors duration-300"
+                >
+                  {about?.email}
+                </a>
               </div>
-            </div>
-
-            {/* Contact Info */}
-            <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-              <div className="flex items-center space-x-2 mb-4">
-                <Code className="w-4 h-4 text-green-400" />
-                <h2 className="text-lg text-white">Contact</h2>
+              <div className="flex items-start space-x-2">
+                <MapPin className="w-3.5 h-3.5 text-green-400 mt-0.5" />
+                <span className="text-gray-400">{about?.city},{about?.country}</span>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {aboutData?.email && (
-                  <a
-                    href={`mailto:${aboutData.email}`}
-                    className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
-                  >
-                    <Mail className="w-4 h-4" />
-                    <span>{aboutData.email}</span>
-                  </a>
-                )}
-                {aboutData?.phone && (
-                  <a
-                    href={`tel:${aboutData.phone}`}
-                    className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
-                  >
-                    <Phone className="w-4 h-4" />
-                    <span>{aboutData.phone}</span>
-                  </a>
-                )}
-                {aboutData?.linkedin && (
-                  <a
-                    href={aboutData.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                    <span>LinkedIn</span>
-                  </a>
-                )}
+              <div className="flex items-start space-x-2">
+                <Link className="w-3.5 h-3.5 text-green-400 mt-0.5" />
+                <div className="flex items-center space-x-3">
+                    <a
+                      key={0}
+                      href={about?.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-400 hover:text-green-400 transition-colors duration-300 flex items-center space-x-1"
+                    >
+                      <span>{about?.linkedin}</span>
+                    </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Skills Section */}
         <div className="mb-12">
           <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
