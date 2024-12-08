@@ -14,6 +14,8 @@ import { StructuredData, getArchitectSchema } from './components/StructuredData'
 import { getAbout } from './services/firebaseService';
 import type { About as AboutData } from './services/firebaseService';
 import { BackToTop } from './components/BackToTop';
+import { Blog } from './pages/Blog';
+import { BlogPost } from './pages/BlogPost';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +48,8 @@ export default function App() {
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/resume" element={<Resume />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
           </Routes>
         </main>
         <Footer />

@@ -9,9 +9,9 @@ export function Resume() {
   const viewUrl = `https://drive.google.com/file/d/${fileId}/view`;
 
   return (
-    <div className="bg-gray-950 min-h-screen font-mono flex flex-col h-screen">
+    <div className="bg-gray-950 min-h-screen font-mono flex flex-col h-screen pt-20">
       {/* Terminal Header */}
-      <div className="flex-1 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-6 w-full flex flex-col mt-20">
+      <div className="flex-1 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-6 w-full flex flex-col">
         <div className="flex-1 bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden flex flex-col">
           <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center space-x-2">
