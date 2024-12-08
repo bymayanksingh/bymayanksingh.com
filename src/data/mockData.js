@@ -78,18 +78,18 @@ export const timeline = [
 
 export const about = {
   id: "about1",
-  name: "Pragya Singh",
+  name: "Mayank Singh",
   title: "Architect & Urban Designer",
   description: "Passionate architect with over 6 years of experience in sustainable design and urban development. Specializing in creating harmonious spaces that blend innovation with environmental consciousness.",
   image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=2000",
-  email: "contact@pragyasingh.com",
+  email: "contact@pmayanksingh.com",
   phone: "+1 (555) 123-4567",
-  linkedin: "https://linkedin.com/in/pragyasingh",
+  linkedin: "https://linkedin.com/in/pmayanksingh",
   resume: "/path/to/resume.pdf"
 };
 
 export const hero = {
-  name: "Pragya",
+  name: "Mayank",
   title: "Architect & Urban Designer",
   subtitle: "Licensed architect in Manchester, specializing in sustainable design and innovative architectural solutions.",
   backgroundImage: "https://images.unsplash.com/photo-1637088059531-4ffcc89d0dd3?q=80&w=1470&auto=format&fit=crop"
@@ -99,7 +99,7 @@ export const contact = {
   id: "contact1",
   title: "Let's Create Something Amazing Together",
   description: "Whether you have a project in mind or just want to explore possibilities, I'm here to help bring your vision to life.",
-  email: "contact@pragyasingh.com",
+  email: "contact@pmayanksingh.com",
   phone: "+1 (555) 123-4567",
   address: "123 Design Street, Creative City, ST 12345",
   availability: "Monday - Friday, 9:00 AM - 6:00 PM"

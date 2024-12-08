@@ -1,7 +1,7 @@
 import type { Hero, Project, Testimonial, TimelineItem, About, Contact, Stats } from '../services/firebaseService';
 
 export const fallbackHero: Hero = {
-  name: "Pragya Singh",
+  name: "Mayank Singh",
   title: "Architect & Designer",
   subtitle: "Creating spaces that inspire",
   backgroundImage: "/images/hero-bg.jpg",
@@ -47,7 +47,7 @@ export const fallbackTestimonials: Testimonial[] = [
     id: "1",
     name: "Jane Smith",
     role: "CEO, Urban Development Corp",
-    content: "Working with Pragya was an incredible experience. Her attention to detail and innovative approach to sustainable design exceeded our expectations.",
+    content: "Working with Mayank was an incredible experience. Her attention to detail and innovative approach to sustainable design exceeded our expectations.",
     image: "/images/testimonials/john.jpg"
   }
 ];
@@ -84,20 +84,20 @@ export const fallbackTimeline: TimelineItem[] = [
 
 export const fallbackAbout: About = {
   id: "1",
-  name: "Pragya Singh",
+  name: "Mayank Singh",
   title: "Lead Architect & Designer",
   description: "Passionate architect with 8+ years of experience in sustainable design and urban development.",
-  image: "/images/about/pragya.jpg",
-  email: "contact@pragya.com",
+  image: "/images/about/pmayank.jpg",
+  email: "contact@pmayank.com",
   phone: "+91 98765 43210",
-  linkedin: "https://linkedin.com/in/pragya",
-  resume: "/files/pragya-resume.pdf"
+  linkedin: "https://linkedin.com/in/pmayank",
+  resume: "/files/pmayank-resume.pdf"
 };
 
 export const fallbackContact: Contact = {
   title: "Get in Touch",
   description: "Let's discuss your architectural vision",
-  email: "contact@pragya.com",
+  email: "contact@pmayank.com",
   phone: "+91 98765 43210",
   address: "Mumbai, India",
   availability: "Monday - Friday, 9:00 AM - 6:00 PM"

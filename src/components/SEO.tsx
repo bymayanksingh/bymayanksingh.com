@@ -15,7 +15,7 @@ export function SEO({
   type = 'website'
 }: SEOProps) {
   const location = useLocation();
-  const domain = 'https://singhpragya.netlify.app';
+  const domain = 'https://singhpmayank.netlify.app';
   const url = `${domain}${location.pathname}`.replace(/\/+/g, '/').replace('http:/', 'http://').replace('https:/', 'https://');
 
   useEffect(() => {

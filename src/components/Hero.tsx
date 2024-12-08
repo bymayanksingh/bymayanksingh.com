@@ -158,7 +158,7 @@ export function Hero() {
                   <span className="text-blue-400">class</span> <span className="text-yellow-400 font-bold">Developer</span> {'{'}
                   <div className="pl-4 space-y-2">
                     <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
-                      <span className="text-purple-400">name:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{heroData?.name || 'Pragya'}"</span>
+                      <span className="text-purple-400">name:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{heroData?.name || 'Mayank'}"</span>
                     </div>
                     <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
                       <span className="text-purple-400">role:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"Software Engineer & Former Architect"</span>
