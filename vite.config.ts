@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Professional Architect',
+        name: 'Professional Software Engineer',
         short_name: 'Arch Portfolio',
-        description: 'Professional architecture portfolio showcasing innovative design and sustainable solutions',
+        description: 'Professional Software Engineerure portfolio showcasing innovative design and sustainable solutions',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
@@ -28,7 +28,7 @@ export default defineConfig({
             type: 'image/png'
           }
         ],
-        categories: ['architecture', 'design', 'portfolio'],
+        categories: ['engineering', 'design', 'portfolio'],
         orientation: 'portrait'
       }
     })

@@ -10,12 +10,13 @@ import { Resume } from './pages/Resume';
 import { Footer } from './components/Footer';
 import { ScrollToTop } from './components/ScrollToTop';
 import { SEO } from './components/SEO';
-import { StructuredData, getArchitectSchema } from './components/StructuredData';
+import { StructuredData, getEngineerSchema } from './components/StructuredData';
 import { getAbout } from './services/firebaseService';
 import type { About as AboutData } from './services/firebaseService';
 import { BackToTop } from './components/BackToTop';
 import { Blog } from './pages/Blog';
 import { BlogPost } from './pages/BlogPost';
+import { NotFound } from './pages/NotFound';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,7 +37,7 @@ export default function App() {
   return (
     <Router>
       <SEO />
-      <StructuredData data={getArchitectSchema(about)} />
+      <StructuredData data={getEngineerSchema(about)} />
       <ScrollToTop />
       <div className="min-h-screen bg-gray-950 flex flex-col">
         <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/resume" element={<Resume />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
         <Footer />

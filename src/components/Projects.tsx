@@ -24,22 +24,22 @@ export function Projects({ showAll = false }: ProjectsProps) {
         setError(null);
         const allProjects = await getProjects();
         console.log('Fetched projects:', allProjects);
-        
+
         // Filter projects based on showAll flag
-        const filteredProjects = showAll 
+        const filteredProjects = showAll
           ? allProjects.filter(project => project.coverImage && project.coverImage.trim() !== '')
-          : allProjects.filter(project => 
-              project.featured && project.coverImage && project.coverImage.trim() !== ''
-            );
-        
+          : allProjects.filter(project =>
+            project.featured && project.coverImage && project.coverImage.trim() !== ''
+          );
+
         // Sort projects by year in descending order
         const sortedProjects = filteredProjects.sort((a, b) => b.year - a.year);
-        
+
         // Extract unique categories
         const uniqueCategories = Array.from(
           new Set(sortedProjects.map(project => project.category))
         ).filter(Boolean); // Remove any undefined/null categories
-        
+
         console.log('Available categories:', uniqueCategories);
         setProjects(sortedProjects);
         setCategories(['all', ...uniqueCategories.sort()]);
@@ -60,7 +60,7 @@ export function Projects({ showAll = false }: ProjectsProps) {
       console.log('Filtered projects (All category):', filtered);
       setFilteredProjects(filtered);
     } else {
-      const filtered = projects.filter(project => 
+      const filtered = projects.filter(project =>
         project.category === selectedCategory && (showAll || project.featured)
       );
       console.log('Filtered projects (category specific):', filtered);
@@ -73,7 +73,7 @@ export function Projects({ showAll = false }: ProjectsProps) {
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
           <Command className="w-5 h-5 animate-spin" />
-          <span>Loading projects...</span>
+          <span>Loading Projects...</span>
         </div>
       </div>
     );
@@ -84,8 +84,8 @@ export function Projects({ showAll = false }: ProjectsProps) {
       <div className="min-h-[400px] flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-400 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="px-4 py-2 bg-gray-800 text-green-400 rounded-lg hover:bg-gray-700 transition-colors"
           >
             Try Again
@@ -150,11 +150,10 @@ export function Projects({ showAll = false }: ProjectsProps) {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-all duration-200 ${
-                      selectedCategory === category
-                        ? 'bg-green-400/10 text-green-400 border border-green-400/30'
-                        : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 border border-gray-800/50'
-                    }`}
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm transition-all duration-200 ${selectedCategory === category
+                      ? 'bg-green-400/10 text-green-400 border border-green-400/30'
+                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50 border border-gray-800/50'
+                      }`}
                   >
                     <GitBranch className="w-3.5 h-3.5" />
                     <span>{category}</span>
@@ -232,7 +231,7 @@ export function Projects({ showAll = false }: ProjectsProps) {
                       }}
                     />
                   </div>
-                  
+
                   {/* Terminal-style Content */}
                   <div className="absolute inset-0 p-5">
                     <div className="h-full flex flex-col justify-between">

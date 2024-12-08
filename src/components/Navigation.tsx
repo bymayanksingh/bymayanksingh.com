@@ -68,7 +68,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 0);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -80,7 +80,12 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
   }, [location.pathname, setIsMenuOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 font-mono">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 font-mono
+        ${isScrolled
+          ? 'bg-gray-950/80 backdrop-blur-md border-b border-gray-800/50'
+          : 'bg-transparent'}`}
+    >
       <nav
         className={`transition-all duration-500 w-full ${isScrolled
           ? 'bg-gray-900/90 backdrop-blur-md border-b border-gray-800/50 shadow-lg shadow-gray-950/50 py-2 sm:py-3'
@@ -97,7 +102,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             >
               <div className="flex items-center space-x-2">
                 <span className="text-green-400 text-sm sm:text-base group-hover:text-green-300 transition-colors duration-300">~/</span>
-                <span className="font-bold text-sm sm:text-base group-hover:text-green-400 transition-colors duration-300">{'@'}bymayanksingh{'>'}</span>
+                <span className="font-bold text-sm sm:text-base group-hover:text-green-400 transition-colors duration-300">{'@'}bymayanksingh{'>_'}</span>
               </div>
             </Link>
 
@@ -179,7 +184,9 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
                       : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
                       }`}
                   >
-                    <span className="text-green-400 mr-2">./</span>{item.label}
+                    <span className="text-green-400 mr-2">
+                      {item.label}
+                    </span>
                   </Link>
                 </motion.div>
               ))}

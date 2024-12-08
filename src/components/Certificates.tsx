@@ -1,87 +1,86 @@
 import { Certificate } from '../services/firebaseService';
-import { CheckCircle2, Terminal, Calendar, Building2, ExternalLink, Award } from 'lucide-react';
+import { CheckCircle2, Trophy } from 'lucide-react';
 import { ImageFallback } from './ImageFallback';
+import { motion } from 'framer-motion';
+import { ImageModal } from './ImageModal';
+import { useState } from 'react';
 
 interface CertificatesProps {
   certificates: Certificate[];
 }
 
 export function Certificates({ certificates }: CertificatesProps) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {certificates.map((certificate) => (
-        <div key={certificate.id} className="group">
-          <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-green-400/50 transition-all duration-300">
-            {/* Window Controls */}
-            <div className="px-4 py-2 bg-gray-900 border-b border-gray-700 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                </div>
-                <div className="ml-4 flex items-center space-x-2 text-gray-400">
-                  <Terminal className="w-4 h-4" />
-                  <span className="text-sm font-mono">certificate.md</span>
-                </div>
-              </div>
-              <Award className="w-4 h-4 text-yellow-500" />
-            </div>
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-            {/* Content */}
-            <div className="p-6 space-y-6">
-              {/* Title and Details */}
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-medium text-white group-hover:text-green-400 transition-colors duration-300">
-                    {certificate.title}
-                  </h3>
-                  <p className="text-sm text-gray-400 line-clamp-3">
-                    {certificate.description}
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 text-green-400">
+          <Trophy className="w-5 h-5" />
+          <h3 className="text-lg font-medium text-white">Certificates</h3>
+        </div>
+      </div>
+
+      {/* Certificates List */}
+      <div className="space-y-4">
+        {certificates?.map((cert, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+            className="group relative bg-gray-900/50 border border-gray-800/50 rounded-lg overflow-hidden hover:bg-gray-800/50 transition-colors"
+          >
+            <div className="p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-gray-200 font-medium mb-1 group-hover:text-green-400 transition-colors">
+                    {cert.title}
+                  </h4>
+                  <p className="text-sm text-gray-400 mb-2">
+                    {cert.organization} • {cert.year}
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    {cert.description}
                   </p>
                 </div>
 
-                {/* Cover Image */}
-                <div className="relative aspect-video rounded-lg overflow-hidden border border-gray-700">
-                  <ImageFallback 
-                    src={certificate.image} 
-                    alt={certificate.title}
-                    className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-500 bg-gray-900 p-2"
-                    fallbackClassName="w-full h-full flex items-center justify-center bg-gray-900"
-                  />
-                </div>
-
-                {/* Metadata */}
-                <div className="grid grid-cols-1 gap-3 pt-4 border-t border-gray-700">
-                  {/* Organization */}
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Building2 className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-400">{certificate.organization}</span>
-                  </div>
-
-                  {/* Year */}
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-400">{certificate.year}</span>
-                  </div>
-
-                  {/* Verification Status */}
-                  <div className="flex items-center space-x-2">
-                    <CheckCircle2 className={`w-4 h-4 ${certificate.verified ? 'text-green-400' : 'text-gray-500'}`} />
-                    <span className={`px-2 py-1 text-xs font-mono ${
-                      certificate.verified 
-                        ? 'text-green-400 bg-green-400/10 border-green-400/20' 
-                        : 'text-gray-400 bg-gray-700/50 border-gray-600'
-                    } rounded-md border`}>
-                      {certificate.verified ? 'Verified' : 'Unverified'}
-                    </span>
-                  </div>
-                </div>
+                {/* Certificate Image Preview */}
+                {cert.image && (
+                  <button
+                    onClick={() => setSelectedImage(cert.image)}
+                    className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border border-gray-700/50 hover:border-green-500/30 transition-colors"
+                  >
+                    <ImageFallback
+                      src={cert.image}
+                      alt={cert.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                )}
               </div>
+
+              {/* Verification Badge */}
+              {cert.verified && (
+                <div className="mt-3 flex items-center gap-1.5 text-xs text-green-400">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Verified Certificate</span>
+                </div>
+              )}
             </div>
-          </div>
-        </div>
-      ))}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Image Modal */}
+      {selectedImage && (
+        <ImageModal
+          src={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </div>
   );
 }

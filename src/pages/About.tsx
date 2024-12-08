@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { 
-  Mail, Phone, Linkedin, 
+import {
+  Mail, Phone, Linkedin,
   CheckCircle2, Command,
   Terminal, Code, GitBranch, BookOpen, Trophy, GraduationCap, MapPin, Link
 } from 'lucide-react';
@@ -12,6 +12,8 @@ import { getPublications, type Publication } from '../services/firebaseService';
 import { getAwards, type Award as AwardData } from '../services/firebaseService';
 import { Publications } from '../components/Publications';
 import { Awards } from '../components/Awards';
+import { PageHeader } from '../components/PageHeader';
+import { motion } from 'framer-motion';
 
 interface Certificate {
   title: string;
@@ -57,7 +59,7 @@ export function About() {
           getPublications(),
           getAwards()
         ]);
-        
+
         if (aboutResult) setAbout(aboutResult);
         setSkills(skillsResult);
         setCertificates(certificatesResult);
@@ -82,7 +84,7 @@ export function About() {
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
           <Command className="w-5 h-5 animate-spin" />
-          <span>Loading profile data...</span>
+          <span>Loading Profile Data...</span>
         </div>
       </div>
     );
@@ -93,7 +95,7 @@ export function About() {
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="text-center space-y-4">
           <p className="text-red-400">{error}</p>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-gray-800 text-green-400 rounded-lg hover:bg-gray-700 transition-colors"
           >
@@ -105,65 +107,12 @@ export function About() {
   }
 
   return (
-    <div className="bg-gray-950 min-h-screen font-mono pt-10 sm:pt-10">
-      {/* Terminal Header */}
+    <div className="bg-gray-950 min-h-screen font-mono pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
-          <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50">
-            {/* Terminal Top Bar */}
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="flex space-x-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                </div>
-                <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
-                  <Terminal className="w-3.5 h-3.5" />
-                  <span>cat about.md</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Bio and Contact Section */}
-            <div className="text-xs space-y-2 pb-2">
-              <div className="flex items-start space-x-2">
-                <Code className="w-3.5 h-3.5 text-green-400 mt-0.5" />
-                <span className="text-gray-400">{about?.title || 'Software Engineer'}</span>
-              </div>
-              <div className="flex items-start space-x-2">
-                <Mail className="w-3.5 h-3.5 text-green-400 mt-0.5" />
-                <a 
-                  href={`mailto:${about?.email}`} 
-                  className="text-gray-400 hover:text-green-400 transition-colors duration-300"
-                >
-                  {about?.email}
-                </a>
-              </div>
-              <div className="flex items-start space-x-2">
-                <MapPin className="w-3.5 h-3.5 text-green-400 mt-0.5" />
-                <span className="text-gray-400">{about?.city},{about?.country}</span>
-              </div>
-              <div className="flex items-start space-x-2">
-                <Link className="w-3.5 h-3.5 text-green-400 mt-0.5" />
-                <div className="flex items-center space-x-3">
-                    <a
-                      key={0}
-                      href={about?.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-400 hover:text-green-400 transition-colors duration-300 flex items-center space-x-1"
-                    >
-                      <span>{about?.linkedin}</span>
-                    </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <PageHeader
+          path="about"
+          description="A brief introduction about my journey and expertise"
+        />
         {/* Skills Section */}
         <div className="mb-12">
           <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700">

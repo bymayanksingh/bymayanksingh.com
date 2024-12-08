@@ -27,7 +27,7 @@ export function ProjectDetail() {
         setError(null);
         console.log('Attempting to fetch project with slug:', slug);
         const data = await getProject(slug);
-        
+
         if (!data) {
           console.error('Project not found in database:', slug);
           setError('Project not found');
@@ -214,7 +214,7 @@ export function ProjectDetail() {
         )}
       </div>
 
-      
+
 
       {/* Image Modal */}
       {project.gallery && (

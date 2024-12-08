@@ -1,23 +1,24 @@
-import React from 'react';
-import { Terminal, Calendar, Clock, Tag } from 'lucide-react';
+import { Terminal, Calendar, Clock, Tag, Info, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { blogPosts } from '../data/blogData';
+import { PageHeader } from '../components/PageHeader';
 
 export function Blog() {
     return (
         <div className="min-h-screen bg-gray-950 pt-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header */}
-                <div className="mb-12">
-                    <div className="flex items-center space-x-2 mb-4">
-                        <Terminal className="w-5 h-5 text-green-400" />
-                        <h1 className="text-2xl text-white">~/blog</h1>
-                    </div>
-                    <p className="text-gray-400 flex items-center gap-2">
-                        <span className="text-green-400">$</span>
-                        <span className="font-mono">ls -la ./posts</span>
-                    </p>
+                <PageHeader
+                    path="blog"
+                    description="Thoughts, tutorials, and insights about software development"
+                />
+
+                {/* Add instruction message */}
+                <div className="flex items-center gap-2 mb-8 p-4 rounded-lg bg-gray-900/50 border border-gray-800/50 text-gray-400">
+                    <Info className="w-5 h-5 text-green-400" />
+                    <span className="text-sm">
+                        Click on any blog card to read the full article in a dedicated page
+                    </span>
                 </div>
 
                 {/* Blog Posts Grid */}
@@ -111,6 +112,11 @@ export function Blog() {
                                     </div>
                                 </div>
                             </Link>
+                            {/* Add subtle click instruction */}
+                            <div className="absolute bottom-4 right-4 flex items-center gap-1.5 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span>Read more</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
+                            </div>
                         </motion.article>
                     ))}
                 </div>

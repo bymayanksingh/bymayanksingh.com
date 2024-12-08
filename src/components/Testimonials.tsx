@@ -30,7 +30,7 @@ export function Testimonials() {
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
           <Command className="w-5 h-5 animate-spin" />
-          <span>Loading testimonials...</span>
+          <span>Loading Testimonials...</span>
         </div>
       </div>
     );
@@ -40,8 +40,8 @@ export function Testimonials() {
     return (
       <div className="py-20 text-center">
         <div className="text-red-600">Error: {error}</div>
-        <button 
-          onClick={() => window.location.reload()} 
+        <button
+          onClick={() => window.location.reload()}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
           Retry
@@ -59,7 +59,7 @@ export function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -67,7 +67,7 @@ export function Testimonials() {
           >
             <span className="text-green-400">pull</span> <span className="text-yellow-400">requests</span>
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -100,8 +100,8 @@ export function Testimonials() {
                 {/* Author Info */}
                 <div className="flex items-center mb-4">
                   {testimonial.image ? (
-                    <img 
-                      src={testimonial.image} 
+                    <img
+                      src={testimonial.image}
                       alt={testimonial.name}
                       className="w-10 h-10 rounded-full object-cover"
                     />

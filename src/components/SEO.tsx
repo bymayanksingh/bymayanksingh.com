@@ -8,8 +8,8 @@ interface SEOProps {
   type?: string;
 }
 
-export function SEO({ 
-  title = 'Professional Architect | Innovative Design Solutions',
+export function SEO({
+  title = 'Professional Software Engineer | Innovative Design Solutions',
   description = 'Explore a portfolio of innovative architectural designs, sustainable solutions, and transformative spaces.',
   image = '/og-image.png',
   type = 'website'
@@ -21,7 +21,7 @@ export function SEO({
   useEffect(() => {
     // Update meta tags
     document.title = title;
-    
+
     // Update meta descriptions
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -82,12 +82,12 @@ export function SEO({
 
 function updateMetaTag(name: string, content: string, attributeName: 'name' | 'property' = 'name') {
   let element = document.querySelector(`meta[${attributeName}="${name}"]`);
-  
+
   if (!element) {
     element = document.createElement('meta');
     element.setAttribute(attributeName, name);
     document.head.appendChild(element);
   }
-  
+
   element.setAttribute('content', content);
 }

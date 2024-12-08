@@ -20,12 +20,12 @@ export function StructuredData({ data }: StructuredDataProps) {
   return null;
 }
 
-export const getArchitectSchema = (about: any) => ({
+export const getEngineerSchema = (about: any) => ({
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "@id": "https://singhpragya.netlify.app/",
-  "name": about?.name || "Professional Architect",
-  "description": about?.shortDescription || "Professional architecture portfolio showcasing innovative design and sustainable solutions",
+  "name": about?.name || "Professional Software Engineer",
+  "description": about?.shortDescription || "Professional Software Engineerure portfolio showcasing innovative design and sustainable solutions",
   "url": "https://singhpragya.netlify.app/",
   "sameAs": [
     about?.linkedin,

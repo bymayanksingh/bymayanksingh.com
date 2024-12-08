@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import { getHero } from '../services/firebaseService';
 import type { Hero as HeroType } from '../services/firebaseService';
 import { getStats } from '../services/dataService';
+
+
 import {
-  Code, Terminal, Database, ArrowRight,
-  Award, Building2, Users, Cpu, Network, Workflow,
-  CircuitBoard, Command, Image
+  ArrowRight, Code, Terminal, Database, Cpu, Network, Workflow,
+  CircuitBoard, Command, Image, Award, Building2, Users, Briefcase, Handshake, Clock, BookOpen, FileCheck
 } from 'lucide-react';
 
 export function Hero() {
@@ -74,13 +75,27 @@ export function Hero() {
     }
   };
 
+  const getIconComponent = (iconName: string) => {
+    const icons = {
+      Building2: Building2,
+      Users: Users,
+      Award: Award,
+      Code: Code,
+      Briefcase,
+      Handshake: Handshake,
+      Clock: Clock,
+      BookOpen: BookOpen,
+      FileCheck: FileCheck
+    };
+    return icons[iconName as keyof typeof icons] || Building2;
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
           <Command className="w-5 h-5 animate-spin" />
-          <span>Initializing system...</span>
+          <span>Initializing System...</span>
         </div>
       </div>
     );
@@ -104,7 +119,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)] -z-10 animate-grid-flow" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 lg:pt-32">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -205,7 +220,7 @@ export function Hero() {
                   </div>
 
                   <img
-                    src={heroData?.profileImage || 'default-profile-image.jpg'}
+                    src={heroData?.backgroundImage || 'default-profile-image.jpg'}
                     alt="Profile"
                     className="rounded-lg object-cover w-full h-full border-2 border-green-500/20 hover:border-green-500/40 transition-colors duration-300"
                   />
@@ -281,29 +296,27 @@ export function Hero() {
           </motion.div>
 
           {/* Stats Section */}
-          {stats && (
+          {stats?.items && (
             <motion.div
               variants={itemVariants}
               className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-12 border-t border-gray-800/50"
             >
-              {[
-                { icon: <Code className="w-5 h-5" />, label: 'Projects', value: stats.projects },
-                { icon: <Users className="w-5 h-5" />, label: 'Clients', value: stats.clients },
-                { icon: <Award className="w-5 h-5" />, label: 'Awards', value: stats.awards },
-                { icon: <Building2 className="w-5 h-5" />, label: 'Experience', value: `${stats.experience}+ Years` }
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="text-center p-6 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 hover:border-gray-700/50 transition-colors"
-                >
-                  <div className="text-green-400 flex justify-center mb-3">
-                    {stat.icon}
-                  </div>
-                  <div className="text-2xl font-bold text-white mb-2">{stat.value}</div>
-                  <div className="text-gray-400 text-sm">{stat.label}</div>
-                </motion.div>
-              ))}
+              {stats.items.map((stat, index) => {
+                const IconComponent = getIconComponent(stat.icon);
+                return (
+                  <motion.div
+                    key={index}
+                    variants={itemVariants}
+                    className="text-center p-6 rounded-lg bg-gray-800/30 backdrop-blur-sm border border-gray-700/30 hover:border-gray-700/50 transition-colors"
+                  >
+                    <div className="text-green-400 flex justify-center mb-3">
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <div className="text-2xl font-bold text-white mb-2">{stat.value}</div>
+                    <div className="text-gray-400 text-sm">{stat.label}</div>
+                  </motion.div>
+                );
+              })}
             </motion.div>
           )}
         </motion.div>
