@@ -33,7 +33,7 @@ export function Publications({ publications }: PublicationsProps) {
               {/* Cover Image */}
               <div className="relative aspect-video rounded-lg overflow-hidden border border-gray-700">
                 <ImageFallback 
-                  src={publication.coverImage} 
+                  src={publication.coverImage || '/images/publication-placeholder.jpg'} 
                   alt={publication.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                 />
@@ -75,7 +75,7 @@ export function Publications({ publications }: PublicationsProps) {
                   <div className="flex items-center space-x-2">
                     <Tag className="w-4 h-4 text-gray-500" />
                     <span className="px-2 py-1 text-xs font-mono text-green-400 bg-green-400/10 rounded-md border border-green-400/20">
-                      {publication.category.charAt(0).toUpperCase() + publication.category.slice(1)}
+                      {publication.category ? (publication.category.charAt(0).toUpperCase() + publication.category.slice(1)) : 'Uncategorized'}
                     </span>
                   </div>
 

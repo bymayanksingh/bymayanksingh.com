@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 # Initialize Firebase Admin
-cred = credentials.Certificate('')
+cred = credentials.Certificate('/Users/mayanksingh/Downloads/bymayanksingh-firebase-adminsdk-jmdt5-aa2d3280d4.json')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
@@ -54,4 +54,4 @@ def delete_and_import_projects(filename):
         print(f"Error during operation: {str(e)}")
 
 if __name__ == "__main__":
-    delete_and_import_projects("projects.json")
+    delete_and_import_projects("firebase_export_20241209_150215.json")
