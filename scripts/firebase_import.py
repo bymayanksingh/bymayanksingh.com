@@ -3,8 +3,8 @@ from firebase_admin import credentials, firestore
 import json
 from datetime import datetime
 
-# Initialize Firebase Admin
-cred = credentials.Certificate('')  # You'll need to update this
+# Initialize Firebase Admin, You'll need to update this
+cred = credentials.Certificate('')
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
