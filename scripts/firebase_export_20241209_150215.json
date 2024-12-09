@@ -1,0 +1,290 @@
+{
+  "about": {
+    "about1": {
+      "shortDescription": "Building and deploying applications with a focus on scalability and innovation.",
+      "description": "Senior Software Engineer with extensive experience in backend and full-stack development. Adept at building performant, reliable systems and contributing to open source projects.",
+      "id": "about1",
+      "instagram": null,
+      "city": "Mumbai",
+      "name": "Mayank Singh",
+      "image": null,
+      "resume": "https://linktr.ee/bymayanksingh",
+      "phone": null,
+      "linkedin": "https://www.linkedin.com/in/bymayanksingh",
+      "country": "India",
+      "title": "Senior Software Engineer | Open Source Contributor",
+      "email": "mayank.singh081997@gmail.com",
+      "services": [
+        "Backend Development",
+        "Frontend Development",
+        "Software Architecture",
+        "Open Source Contributions"
+      ]
+    }
+  },
+  "affiliations": {
+    "edraLabs": {
+      "acronym": "Edra",
+      "timeline": "Sep 2024 - Present",
+      "role": "Engineering",
+      "icon": "Tech",
+      "place": "Mumbai, Maharashtra, India",
+      "order": 1,
+      "name": "Edra Labs"
+    },
+    "idfy": {
+      "acronym": "IDfy",
+      "timeline": "Jun 2021 - Sep 2024",
+      "role": "Senior Software Engineer",
+      "icon": "Tech",
+      "place": "Mumbai, Maharashtra, India",
+      "order": 2,
+      "name": "IDfy"
+    },
+    "crioDo": {
+      "acronym": "Crio",
+      "timeline": "Jan 2021 - Apr 2021",
+      "role": "Software Development Extern",
+      "icon": "Learning",
+      "place": "Remote",
+      "order": 3,
+      "name": "Crio.Do"
+    },
+    "innovaccer": {
+      "acronym": "Innovaccer",
+      "timeline": "Apr 2020 - Jun 2020",
+      "role": "Software Engineering Intern",
+      "icon": "Tech",
+      "place": "Remote",
+      "order": 4,
+      "name": "Innovaccer"
+    },
+    "pyBites": {
+      "acronym": "PyBites",
+      "timeline": "Oct 2018 - Apr 2020",
+      "role": "Open Source Developer",
+      "icon": "Tech",
+      "place": "Remote",
+      "order": 5,
+      "name": "PyBites"
+    },
+    "osdc": {
+      "acronym": "OSDC",
+      "timeline": "Jul 2019 - Oct 2020",
+      "role": "Core Team Member & Designer",
+      "icon": "Community",
+      "place": "Noida, Uttar Pradesh, India",
+      "order": 6,
+      "name": "Open Source Developers Community (OSDC)"
+    }
+  },
+  "certificates": {
+    "smartIndia": {
+      "year": "2023",
+      "verified": true,
+      "description": "Participant in Smart India Hackathon by MHRD.",
+      "title": "Smart India Hackathon"
+    },
+    "sqlIntro": {
+      "year": "2021",
+      "verified": true,
+      "description": "Completed Introduction to SQL.",
+      "title": "Introduction to SQL"
+    },
+    "crioWinter": {
+      "year": "2021",
+      "verified": true,
+      "description": "Crio Winter of Doing Programme Completion Certificate.",
+      "title": "Crio Winter of Doing"
+    },
+    "jsonPath": {
+      "year": "2021",
+      "verified": true,
+      "description": "JSON PATH Quiz Completion Certificate.",
+      "title": "JSON PATH Quiz"
+    },
+    "factorApp": {
+      "year": "2021",
+      "verified": true,
+      "description": "Mastery of the 12 Factor App methodology.",
+      "title": "12 Factor App"
+    }
+  },
+  "skills": {
+    "list": {
+      "list": [
+        "Python3",
+        "Elixir",
+        "JavaScript",
+        "Agile Methodologies",
+        "Quality Assurance",
+        "Backend Development",
+        "Frontend Development",
+        "Django",
+        "Flask",
+        "React",
+        "Node.js",
+        "Phoenix"
+      ]
+    }
+  },
+  "stats": {
+    "stats": {
+      "id": "stats",
+      "items": [
+        {
+          "value": "10+",
+          "icon": "Briefcase",
+          "label": "Projects"
+        },
+        {
+          "value": "3",
+          "icon": "Award",
+          "label": "Recognitions"
+        },
+        {
+          "value": "7",
+          "icon": "Handshake",
+          "label": "Organizations"
+        },
+        {
+          "value": "3+",
+          "icon": "Clock",
+          "label": "Years of Experience"
+        },
+        {
+          "value": "1",
+          "icon": "BookOpen",
+          "label": "Publications"
+        },
+        {
+          "value": "4+",
+          "icon": "FileCheck",
+          "label": "Certificates"
+        }
+      ]
+    }
+  },
+  "timeline": {
+    "bachelors": {
+      "year": 2021,
+      "description": "Graduated with a Bachelor's degree in Information Technology.",
+      "event": "Bachelor's Degree",
+      "id": "timelineBachelors",
+      "icon": "Education",
+      "details": "From Jaypee Institute of Information Technology."
+    },
+    "edra": {
+      "year": 2024,
+      "description": "Engineering role focused on scalable tech development.",
+      "event": "Engineering",
+      "id": "timelineEdra",
+      "icon": "Briefcase",
+      "details": "Building software solutions at Edra Labs."
+    },
+    "idfy": {
+      "year": 2021,
+      "description": "Led the development of microservices in the KYC team.",
+      "event": "Senior Software Engineer",
+      "id": "timelineIDfy",
+      "icon": "Tech",
+      "details": "Spearheaded backend solutions, handled peak traffic, and mentored team members."
+    },
+    "crioWinter": {
+      "year": 2021,
+      "description": "Worked on GPS-based Asset Tracking Portal for Jumbotail.",
+      "event": "Software Development Extern",
+      "id": "timelineCrio",
+      "icon": "Learning",
+      "details": "Selected in top ~150 out of 10k participants for Crio Winter of Doing."
+    }
+  },
+  "publications": {
+    "dockerGuide": {
+      "year": 2023,
+      "description": "A beginner's guide to Docker.",
+      "title": "Docker: A Beginner's Guide",
+      "authors": ["Mayank Singh"],
+      "link": null
+    }
+  },
+  "projects": {
+    "0CDboPAqPHJuYo5Jix4Q": {
+      "year": 2021,
+      "description": "Developed a GPS-based Asset Tracking Portal for Jumbotail as part of Crio Winter of Doing Program.",
+      "id": "gpsAssetTracking",
+      "status": "Completed",
+      "area": "N/A",
+      "coverImage": null,
+      "client": "Jumbotail",
+      "date": "2021",
+      "category": "Software Development",
+      "title": "GPS Asset Tracking Portal",
+      "details": [
+        "Designed and implemented a robust tracking system for assets.",
+        "Part of the Crio Winter of Doing Program, selected among the top 150 out of 10,000 participants."
+      ],
+      "location": "Remote",
+      "gallery": [],
+      "featured": false
+    },
+    "1CDboPAqPHJuYo5Jix4Q": {
+      "year": 2023,
+      "description": "Developed a scalable document fetching application for KYC workflows.",
+      "id": "documentFetcher",
+      "status": "Live",
+      "area": "N/A",
+      "coverImage": null,
+      "client": "IDfy",
+      "date": "2023",
+      "category": "Backend Development",
+      "title": "Document Fetcher",
+      "details": [
+        "Built and maintained Elixir-based scalable apps.",
+        "Handled up to 800 RPS during IPL peak traffic for Dream11.",
+        "Integrated with DigiLocker and external APIs."
+      ],
+      "location": "Mumbai, India",
+      "gallery": [],
+      "featured": true
+    },
+    "2CDboPAqPHJuYo5Jix4Q": {
+      "year": 2019,
+      "description": "Organized and participated in OSDHack'19 Hackathon.",
+      "id": "osdHack19",
+      "status": "Completed",
+      "area": "N/A",
+      "coverImage": null,
+      "client": "Open Source Developers Community",
+      "date": "2019",
+      "category": "Event Management",
+      "title": "OSDHack'19",
+      "details": [
+        "Mentored participants and managed logistics for the event.",
+        "Contributed to the hackathon's technical setup and facilitation."
+      ],
+      "location": "Noida, India",
+      "gallery": [],
+      "featured": false
+    },
+    "3CDboPAqPHJuYo5Jix4Q": {
+      "year": 2020,
+      "description": "Developed and mentored the Connect4 open-source project.",
+      "id": "connect4",
+      "status": "Open Source",
+      "area": "N/A",
+      "coverImage": null,
+      "client": "Kharagpur Open Source Society",
+      "date": "2020",
+      "category": "Open Source Development",
+      "title": "Connect4",
+      "details": [
+        "Mentored 30+ students across India in open-source development.",
+        "Facilitated 25+ pull requests, 24 forks, and 12 stars within a month."
+      ],
+      "location": "Remote",
+      "gallery": [],
+      "featured": true
+    }
+  }
+}

@@ -42,4 +42,4 @@ def import_data(filename):
 
 if __name__ == "__main__":
     # You can specify the export file to import
-    import_data("firebase_export_20241209_125159.json")
+    import_data("firebase_export_20241209_150215.json")
