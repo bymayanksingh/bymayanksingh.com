@@ -27,10 +27,8 @@ export function Projects({ showAll = false }: ProjectsProps) {
 
         // Filter projects based on showAll flag
         const filteredProjects = showAll
-          ? allProjects.filter(project => project.coverImage && project.coverImage.trim() !== '')
-          : allProjects.filter(project =>
-            project.featured && project.coverImage && project.coverImage.trim() !== ''
-          );
+          ? allProjects
+          : allProjects.filter(project => project.featured);
 
         // Sort projects by year in descending order
         const sortedProjects = filteredProjects.sort((a, b) => b.year - a.year);

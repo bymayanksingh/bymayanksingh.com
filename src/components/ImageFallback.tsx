@@ -9,15 +9,15 @@ interface ImageFallbackProps {
 }
 
 export function ImageFallback({ src, alt, className = '', fallbackClassName = '' }: ImageFallbackProps) {
-  const [imgSrc, setImgSrc] = useState<string>(src || '');
+  const [imgSrc, setImgSrc] = useState<string>(src || '/images/project-placeholder.jpg');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(!src);
+  const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 1;
 
   useEffect(() => {
     if (!src) {
-      setError(true);
+      setImgSrc('/images/project-placeholder.jpg');
       setLoading(false);
       return;
     }
@@ -28,27 +28,9 @@ export function ImageFallback({ src, alt, className = '', fallbackClassName = ''
   }, [src]);
 
   const handleError = () => {
-    if (!imgSrc) {
-      setError(true);
-      setLoading(false);
-      return;
-    }
-    
-    console.log('Image failed to load:', imgSrc);
-    
-    if (retryCount < MAX_RETRIES) {
-      console.log(`Retrying image load (${retryCount + 1}/${MAX_RETRIES}):`, imgSrc);
-      // Add a small delay before retrying
-      setTimeout(() => {
-        setRetryCount(prev => prev + 1);
-        // Force a reload by appending a timestamp
-        setImgSrc(`${imgSrc}${imgSrc.includes('?') ? '&' : '?'}t=${Date.now()}`);
-      }, 1000);
-    } else {
-      console.log(`Max retries reached for: ${alt}`);
-      setError(true);
-      setLoading(false);
-    }
+    setImgSrc('/images/project-placeholder.jpg');
+    setError(true);
+    setLoading(false);
   };
 
   // For Google Drive preview URLs, use an iframe
