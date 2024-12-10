@@ -206,18 +206,6 @@ export function Hero() {
                   transition={{ delay: 0.5, duration: 0.5 }}
                   className="relative aspect-square max-w-[280px] mx-auto"
                 >
-                  <div className="absolute inset-0 flex items-center justify-center text-[0.6rem] leading-none font-mono text-green-400 opacity-30">
-                    <pre className="select-none">
-                      {`
-   ████████
- ██        ██
-██   ⌐◨-◨   ██
-██          ██
- ██        ██
-   ████████
-                      `}
-                    </pre>
-                  </div>
 
                   <img
                     src={heroData?.backgroundImage || 'default-profile-image.jpg'}
