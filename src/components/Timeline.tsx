@@ -14,6 +14,7 @@ export function Timeline() {
       try {
         const data = await getTimeline();
         const sortedData = [...data].sort((a, b) => b.year - a.year); // Sort by year in descending order
+        console.log('Sorted timeline data:', sortedData);
         setTimelineData(sortedData);
       } catch (error) {
         console.error('Error fetching timeline data:', error);
@@ -110,7 +111,12 @@ export function Timeline() {
                     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 sm:p-6 transition-all duration-300 hover:border-green-500/50 hover:bg-gray-800/80">
                       <div className="font-mono">
                         <div className="flex items-center gap-2 text-green-400 text-xs mb-3">
-                          <GitCommit className="w-4 h-4" />
+                          {/* Use the dynamic icon from data */}
+                          {item.icon === 'Briefcase' ? (
+                            <Terminal className="w-4 h-4" />
+                          ) : (
+                            <GitCommit className="w-4 h-4" />
+                          )}
                           <span className="font-mono">{Math.random().toString(16).slice(2, 10)}</span>
                         </div>
 
@@ -118,21 +124,19 @@ export function Timeline() {
                           {item.event}
                         </h3>
 
+                        {/* Details section */}
                         <div className="text-yellow-400/90 text-sm mb-3 break-words">
-                          {item.company}
+                          {item.details}
                         </div>
 
                         <div className="flex flex-wrap gap-3 text-gray-400 text-xs mb-4">
-                          <div className="flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            <span>{item.location}</span>
-                          </div>
                           <div className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
                             <span>{item.year}</span>
                           </div>
                         </div>
 
+                        {/* Description section */}
                         <div className="text-gray-300 text-sm space-y-1">
                           {item.description.split('\n').map((line, i) => (
                             <div key={i} className="flex items-start gap-2 group-hover:text-gray-200 transition-colors">
