@@ -13,6 +13,7 @@ import { getAwards, type Award as AwardData } from '../services/firebaseService'
 import { Publications } from '../components/Publications';
 import { Awards } from '../components/Awards';
 import { PageHeader } from '../components/PageHeader';
+import { Affiliations } from '../components/Affiliations';
 import { motion } from 'framer-motion';
 
 interface Certificate {
@@ -167,6 +168,14 @@ export function About() {
             </div>
           </div>
         </div>
+
+        {/* Affiliations Section */}
+        <section className="mt-12">
+          <h2 className="text-xl text-green-400 font-medium mb-6">
+            <span className="text-gray-400">$</span> cat ./affiliations.md
+          </h2>
+          <Affiliations affiliations={affiliations} isLoading={loading} />
+        </section>
 
         {/* Publications Section */}
         <div className="mb-12">

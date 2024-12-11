@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc, query, where, addDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, query, where, addDoc, orderBy } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../config/firebase';
 
@@ -118,6 +118,18 @@ export interface Affiliation {
   timeline: string;
   role: string;
   order: number;
+}
+
+export interface Affiliation {
+  id: string;
+  name: string;
+  role: string;
+  logo: string;
+  url: string;
+  startDate: string;
+  endDate?: string;
+  current: boolean;
+  description: string;
 }
 
 export interface Publication {
@@ -556,8 +568,13 @@ export const getCertificates = async (): Promise<Certificate[]> => {
 export const getAffiliations = async (): Promise<Affiliation[]> => {
   try {
     const affiliationsRef = collection(db, 'affiliations');
-    const snapshot = await getDocs(affiliationsRef);
-    return snapshot.docs.map(doc => doc.data() as Affiliation);
+    const q = query(affiliationsRef, orderBy('startDate', 'desc'));
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as Affiliation[];
   } catch (error) {
     console.error('Error fetching affiliations:', error);
     return [];
