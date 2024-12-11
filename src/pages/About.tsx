@@ -139,9 +139,104 @@ export function About() {
               <span className="text-gray-400">$</span> cat ./about.md
             </h2>
           </div>
-          <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm p-6">
-            <div className="prose prose-invert max-w-none">
-              {about?.description}
+          <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
+            <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center">
+              <div className="flex items-center space-x-2">
+                <div className="flex space-x-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                </div>
+                <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
+                  <Terminal className="w-3.5 h-3.5" />
+                  <span>about.json</span>
+                </div>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row gap-8">
+                {/* Profile Image */}
+                <div className="w-full md:w-1/3">
+                  <div className="aspect-square rounded-lg overflow-hidden border border-gray-800/50">
+                    <img
+                      src={about?.image}
+                      alt={about?.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Profile Info */}
+                <div className="w-full md:w-2/3 space-y-6">
+                  <div>
+                    <h1 className="text-2xl text-green-400 font-medium mb-2">
+                      {about?.name}
+                    </h1>
+                    <p className="text-gray-400">
+                      {about?.title}
+                    </p>
+                  </div>
+
+                  <div className="prose prose-invert max-w-none">
+                    <p className="text-gray-400">{about?.description}</p>
+                  </div>
+
+                  {/* Services */}
+                  <div className="space-y-3">
+                    <h3 className="text-green-400 font-medium">Services</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {about?.services.map((service, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center space-x-2 text-gray-400"
+                        >
+                          <span className="w-1.5 h-1.5 bg-green-400/50 rounded-full"></span>
+                          <span>{service}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Contact Info */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-800/50">
+                    {about?.email && (
+                      <a
+                        href={`mailto:${about.email}`}
+                        className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
+                      >
+                        <Mail className="w-4 h-4" />
+                        <span>{about.email}</span>
+                      </a>
+                    )}
+                    {about?.phone && (
+                      <a
+                        href={`tel:${about.phone}`}
+                        className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
+                      >
+                        <Phone className="w-4 h-4" />
+                        <span>{about.phone}</span>
+                      </a>
+                    )}
+                    {about?.linkedin && (
+                      <a
+                        href={about.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
+                      >
+                        <Linkedin className="w-4 h-4" />
+                        <span>LinkedIn</span>
+                      </a>
+                    )}
+                    {(about?.city || about?.country) && (
+                      <div className="flex items-center space-x-2 text-gray-400">
+                        <MapPin className="w-4 h-4" />
+                        <span>{[about.city, about.country].filter(Boolean).join(', ')}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -301,6 +396,22 @@ export function About() {
           </div>
           <Awards awards={awards} isLoading={loading} />
         </section>
+
+        {/* Footer Section */}
+        <footer className="mt-16">
+          <div className="flex items-center space-x-2 mb-6">
+            <Terminal className="w-5 h-5 text-green-400" />
+            <h2 className="text-xl text-green-400 font-medium">
+              <span className="text-gray-400">$</span> cat ./footer.md
+            </h2>
+          </div>
+          <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm p-6">
+            <div className="prose prose-invert max-w-none">
+              <p className="text-gray-400">Made with love by Mayank Singh</p>
+              <p className="text-gray-400">Copyright 2024 Mayank Singh</p>
+            </div>
+          </div>
+        </footer>
 
         {/* Image Modal */}
         {selectedCertificate && (

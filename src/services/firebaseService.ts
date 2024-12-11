@@ -480,13 +480,13 @@ export const getTimeline = async (): Promise<TimelineItem[]> => {
 // About
 export async function getAbout(): Promise<About | null> {
   try {
-    const docRef = doc(db, 'about', 'about');
+    const docRef = doc(db, 'about', 'about1');
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       const data = docSnap.data();
-      const about: About = {
-        id: docSnap.id,
+      return {
+        id: data.id || docSnap.id,
         name: data.name || '',
         title: data.title || '',
         description: data.description || '',
@@ -499,15 +499,8 @@ export async function getAbout(): Promise<About | null> {
         linkedin: data.linkedin || '',
         instagram: data.instagram || '',
         resume: data.resume || '',
-        services: data.services || [],
-        skills: data.skills || []
+        services: data.services || []
       };
-
-      if (about.image) {
-        about.image = await getStorageUrl(about.image);
-      }
-
-      return about;
     }
     return null;
   } catch (error) {
