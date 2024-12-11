@@ -17,6 +17,7 @@ import { BackToTop } from './components/BackToTop';
 import { Blog } from './pages/Blog';
 import { BlogPost } from './pages/BlogPost';
 import { NotFound } from './pages/NotFound';
+import { Photography } from './pages/Photography';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,6 +50,7 @@ export default function App() {
             <Route path="/projects/:slug" element={<ProjectDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/resume" element={<Resume />} />
+            <Route path="/photography" element={<Photography />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="*" element={<NotFound />} />

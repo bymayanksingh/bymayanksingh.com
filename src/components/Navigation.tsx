@@ -12,6 +12,7 @@ interface NavigationProps {
 const navItems = [
   { path: '/', label: './Home', ariaLabel: 'Go to Home page' },
   { path: '/projects', label: './Projects', ariaLabel: 'View Engineering Projects' },
+  { path: '/photography', label: './Photography', ariaLabel: 'View Photography Gallery' },
   { path: '/blog', label: './Blog', ariaLabel: 'Read Blog Posts' },
   { path: '/about', label: './About', ariaLabel: 'Learn more about the Engineer' },
   { path: '/resume', label: './Resume', ariaLabel: 'View Resume' }
