@@ -397,22 +397,6 @@ export function About() {
           <Awards awards={awards} isLoading={loading} />
         </section>
 
-        {/* Footer Section */}
-        <footer className="mt-16">
-          <div className="flex items-center space-x-2 mb-6">
-            <Terminal className="w-5 h-5 text-green-400" />
-            <h2 className="text-xl text-green-400 font-medium">
-              <span className="text-gray-400">$</span> cat ./footer.md
-            </h2>
-          </div>
-          <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm p-6">
-            <div className="prose prose-invert max-w-none">
-              <p className="text-gray-400">Made with love by Mayank Singh</p>
-              <p className="text-gray-400">Copyright 2024 Mayank Singh</p>
-            </div>
-          </div>
-        </footer>
-
         {/* Image Modal */}
         {selectedCertificate && (
           <ImageModal
