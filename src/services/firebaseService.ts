@@ -69,6 +69,10 @@ export interface About {
   instagram: string;
   resume: string;
   services: string[];
+  skills: Array<{
+    category: string;
+    items: string[];
+  }>;
 }
 
 export interface Contact {
@@ -436,16 +440,20 @@ export const getProjectsByCategory = async (category: string): Promise<Project[]
 };
 
 // Skills
-export const getSkills = async (): Promise<string[]> => {
+export async function getSkills(): Promise<string[]> {
   try {
-    const snapshot = await getDocs(collection(db, 'skills'));
-    const skillsDoc = snapshot.docs[0];
-    return skillsDoc ? (skillsDoc.data().list as string[]) : [];
+    const skillsRef = doc(db, 'skills', 'list');
+    const skillsSnap = await getDoc(skillsRef);
+    
+    if (skillsSnap.exists()) {
+      return skillsSnap.data().list || [];
+    }
+    return [];
   } catch (error) {
-    console.error('Error fetching skills:', error);
+    console.error('Error getting skills:', error);
     return [];
   }
-};
+}
 
 // Testimonials
 export const getTestimonials = async (): Promise<Testimonial[]> => {
@@ -470,28 +478,43 @@ export const getTimeline = async (): Promise<TimelineItem[]> => {
 };
 
 // About
-export const getAbout = async (): Promise<About | null> => {
+export async function getAbout(): Promise<About | null> {
   try {
-    const aboutCollection = collection(db, 'about');
-    const aboutSnapshot = await getDocs(aboutCollection);
-    
-    if (!aboutSnapshot.empty) {
-      const aboutDoc = aboutSnapshot.docs[0];
-      const data = aboutDoc.data();
-      const image = data.image ? await getStorageUrl(data.image) : '';
-      return { 
-        id: aboutDoc.id, 
-        ...data,
-        image
-      } as About;
+    const docRef = doc(db, 'about', 'about');
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      const about: About = {
+        id: docSnap.id,
+        name: data.name || '',
+        title: data.title || '',
+        description: data.description || '',
+        shortDescription: data.shortDescription || '',
+        image: data.image || '',
+        email: data.email || '',
+        city: data.city || '',
+        country: data.country || '',
+        phone: data.phone || '',
+        linkedin: data.linkedin || '',
+        instagram: data.instagram || '',
+        resume: data.resume || '',
+        services: data.services || [],
+        skills: data.skills || []
+      };
+
+      if (about.image) {
+        about.image = await getStorageUrl(about.image);
+      }
+
+      return about;
     }
-    
     return null;
   } catch (error) {
-    console.error('Error fetching about data:', error);
+    console.error('Error getting about:', error);
     return null;
   }
-};
+}
 
 // Contact
 export const getContact = async (): Promise<Contact | null> => {
