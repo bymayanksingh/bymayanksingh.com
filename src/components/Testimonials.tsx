@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getTestimonials } from '../services/firebaseService';
 import type { Testimonial } from '../services/firebaseService';
 import { motion } from 'framer-motion';
-import { Command } from 'lucide-react';
+import { Terminal, GitBranch } from 'lucide-react';
 
 export function Testimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -24,12 +24,11 @@ export function Testimonials() {
     fetchTestimonials();
   }, []);
 
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
         <div className="flex items-center space-x-3 text-green-400">
-          <Command className="w-5 h-5 animate-spin" />
+          <Terminal className="w-5 h-5 animate-spin" />
           <span>Loading Testimonials...</span>
         </div>
       </div>
@@ -59,22 +58,26 @@ export function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <motion.h2
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-mono text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-100 mb-4"
+            className="flex items-center justify-center gap-2 mb-4"
           >
-            <span className="text-green-400">pull</span> <span className="text-yellow-400">requests</span>
-          </motion.h2>
-          <motion.p
+            <Terminal className="w-6 h-6 text-green-400" />
+            <h2 className="font-mono text-2xl sm:text-3xl font-bold text-gray-100">
+              git log --author="collaborators"
+            </h2>
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-400 text-lg font-mono"
+            className="flex items-center justify-center gap-2 text-sm text-gray-400 font-mono"
           >
-            # Merged feedback from collaborators
-          </motion.p>
+            <GitBranch className="w-4 h-4" />
+            <span>git fetch origin testimonials</span>
+          </motion.div>
         </div>
 
         {/* Testimonials Grid */}
@@ -85,46 +88,70 @@ export function Testimonials() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-card rounded-lg overflow-hidden"
+              className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg overflow-hidden hover:border-green-500/50 transition-all duration-300"
             >
-              {/* PR Header */}
-              <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">
+              {/* Terminal Header */}
+              <div className="bg-gray-900 px-4 py-2 flex items-center justify-between border-b border-gray-700">
                 <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span className="text-gray-400 text-sm font-mono">PR #{index + 1} (merged)</span>
+                  <div className="flex space-x-1">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                  </div>
+                  <span className="text-gray-400 text-xs font-mono">review-{testimonial.id.slice(0, 6)}.md</span>
                 </div>
               </div>
 
-              {/* PR Content */}
-              <div className="p-6">
-                {/* Author Info */}
-                <div className="flex items-center mb-4">
-                  {testimonial.image ? (
-                    <img
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-300 font-mono text-sm">
-                      {testimonial.name.split(' ').map(word => word[0]).join('')}
-                    </div>
-                  )}
-                  <div className="ml-3">
-                    <div className="text-gray-100 font-mono font-semibold">{testimonial.name}</div>
-                    <div className="text-gray-400 text-sm font-mono">{testimonial.role}</div>
-                  </div>
+              {/* Content */}
+              <div className="p-6 font-mono">
+                {/* Command Line */}
+                <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
+                  <span>$</span>
+                  <span>cat review.md</span>
                 </div>
 
                 {/* Review Content */}
-                <div className="space-y-4">
-                  <div className="text-gray-300 font-mono text-sm">
-                    <div className="text-green-400 mb-2">// Code Review Feedback</div>
-                    {testimonial.content.split('\n').map((line, i) => (
-                      <div key={i} className="pl-4 border-l-2 border-green-500/30">
-                        <span className="text-green-400">+</span> {line}
+                <div className="pl-4 border-l-2 border-green-500/30 mb-6 space-y-2">
+                  {testimonial.content.split('\n').map((line, i) => (
+                    <div key={i} className="text-gray-300 text-sm">
+                      <span className="text-green-400 mr-2">&gt;</span>
+                      {line}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Author Info as Git Config */}
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <span>$</span>
+                    <span>git config --get user.info</span>
+                  </div>
+                  <div className="flex items-center gap-3 pl-4">
+                    {testimonial.image ? (
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-10 h-10 rounded-full border border-green-500/30"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-gray-700 border border-green-500/30 flex items-center justify-center text-gray-300 text-sm">
+                        {testimonial.name.split(' ').map(word => word[0]).join('')}
                       </div>
-                    ))}
+                    )}
+                    <div>
+                      <div className="text-gray-200">{testimonial.name}</div>
+                      <div className="text-gray-400 text-xs">{testimonial.role}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Git Status */}
+                <div className="mt-6 pt-4 border-t border-gray-700">
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-gray-400">$</span>
+                    <span className="text-gray-400">git status</span>
+                    <span className="text-green-400">✓</span>
+                    <span className="text-gray-400">review verified</span>
                   </div>
                 </div>
               </div>
@@ -132,11 +159,19 @@ export function Testimonials() {
           ))}
         </div>
 
-        {/* Terminal-style footer */}
-        <div className="mt-12 text-center font-mono">
-          <span className="text-gray-400">git merge</span>{' '}
-          <span className="text-green-400">client-testimonials</span>
-        </div>
+        {/* Terminal Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-12 text-center font-mono"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700/50">
+            <Terminal className="w-4 h-4 text-green-400" />
+            <span className="text-gray-400 text-sm">$</span>
+            <span className="text-green-400 text-sm">git merge --no-ff testimonials</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

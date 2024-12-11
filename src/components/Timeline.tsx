@@ -110,40 +110,50 @@ export function Timeline() {
                   `}>
                     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 sm:p-6 transition-all duration-300 hover:border-green-500/50 hover:bg-gray-800/80">
                       <div className="font-mono">
-                        <div className="flex items-center gap-2 text-green-400 text-xs mb-3">
-                          {/* Use the dynamic icon from data */}
-                          {item.icon === 'Briefcase' ? (
-                            <Terminal className="w-4 h-4" />
-                          ) : (
-                            <GitCommit className="w-4 h-4" />
-                          )}
-                          <span className="font-mono">{Math.random().toString(16).slice(2, 10)}</span>
+                        {/* Command Line Header */}
+                        <div className="flex items-center gap-2 text-green-400 text-xs mb-4">
+                          <Terminal className="w-4 h-4" />
+                          <span className="text-gray-400">$</span>
+                          <span>git show {item.id.slice(0, 8)}</span>
                         </div>
 
-                        <h3 className="text-base sm:text-lg font-bold text-gray-100 mb-2 break-words">
-                          {item.event}
-                        </h3>
-
-                        {/* Details section */}
-                        <div className="text-yellow-400/90 text-sm mb-3 break-words">
-                          {item.details}
-                        </div>
-
-                        <div className="flex flex-wrap gap-3 text-gray-400 text-xs mb-4">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            <span>{item.year}</span>
+                        {/* Commit Info */}
+                        <div className="pl-6 border-l-2 border-gray-700 mb-4">
+                          <div className="text-gray-400 text-xs mb-2">
+                            <span className="text-gray-500">commit</span> {item.id.slice(0, 40)}
+                          </div>
+                          <div className="text-gray-400 text-xs">
+                            <span className="text-gray-500">Date:</span> {item.year}
                           </div>
                         </div>
 
-                        {/* Description section */}
-                        <div className="text-gray-300 text-sm space-y-1">
+                        {/* Event Title as Commit Message */}
+                        <div className="pl-6 text-base sm:text-lg font-bold text-gray-100 mb-3">
+                          <span className="text-green-400">$</span> {item.event}
+                        </div>
+
+                        {/* Details as Branch Info */}
+                        <div className="pl-6 text-yellow-400/90 text-sm mb-3 font-mono">
+                          <span className="text-gray-500">branch:</span> {item.details}
+                        </div>
+
+                        {/* Description as Diff */}
+                        <div className="mt-4 text-sm space-y-1 bg-gray-900/50 p-3 rounded-md">
+                          <div className="text-gray-400 mb-2">$ git diff --stat</div>
                           {item.description.split('\n').map((line, i) => (
                             <div key={i} className="flex items-start gap-2 group-hover:text-gray-200 transition-colors">
-                              <span className="text-green-400/80 text-xs mt-1">+</span>
-                              <span className="break-words flex-1">{line}</span>
+                              <span className="text-green-400">+</span>
+                              <span className="text-gray-300">{line}</span>
                             </div>
                           ))}
+                        </div>
+
+                        {/* Icon as Status */}
+                        <div className="mt-4 flex items-center gap-2 text-xs text-gray-400">
+                          <span className="text-gray-500">$</span>
+                          <span>git status</span>
+                          <span className="text-green-400">✓</span>
+                          <span>{item.icon}</span>
                         </div>
                       </div>
                     </div>
