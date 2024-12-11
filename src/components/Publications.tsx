@@ -1,119 +1,105 @@
-import { Publication } from '../services/firebaseService';
-import { BookOpen, Terminal, Calendar, Building2, Tag, ExternalLink, Users, Link2 } from 'lucide-react';
-import { ImageFallback } from './ImageFallback';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Terminal, BookOpen, ExternalLink, Users, Calendar } from 'lucide-react';
+import type { Publication } from '../services/firebaseService';
 
 interface PublicationsProps {
   publications: Publication[];
+  isLoading: boolean;
 }
 
-export function Publications({ publications }: PublicationsProps) {
+export function Publications({ publications, isLoading }: PublicationsProps) {
+  if (isLoading) {
+    return (
+      <div className="animate-pulse space-y-4">
+        {[1, 2].map((i) => (
+          <div key={i} className="bg-gray-800/50 rounded-lg p-4">
+            <div className="h-5 bg-gray-700/50 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-700/50 rounded w-1/2"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {publications.map((publication) => (
-        <div key={publication.id} className="group">
-          <div className="bg-gray-800 rounded-lg overflow-hidden border border-gray-700 hover:border-green-400/50 transition-all duration-300">
-            {/* Window Controls */}
-            <div className="px-4 py-2 bg-gray-900 border-b border-gray-700 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                </div>
-                <div className="ml-4 flex items-center space-x-2 text-gray-400">
-                  <Terminal className="w-4 h-4" />
-                  <span className="text-sm font-mono">publication.md</span>
-                </div>
-              </div>
-              <BookOpen className="w-4 h-4 text-green-400" />
-            </div>
-
-            {/* Content */}
-            <div className="p-6 space-y-6">
-              {/* Cover Image */}
-              <div className="relative aspect-video rounded-lg overflow-hidden border border-gray-700">
-                <ImageFallback 
-                  src={publication.coverImage || '/images/publication-placeholder.jpg'} 
-                  alt={publication.title}
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-60" />
-              </div>
-
-              {/* Title and Details */}
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-medium text-white group-hover:text-green-400 transition-colors duration-300">
-                    {publication.title}
-                  </h3>
-                  <p className="text-sm text-gray-400 line-clamp-3">
-                    {publication.abstract}
-                  </p>
-                </div>
-
-                {/* Metadata */}
-                <div className="grid grid-cols-1 gap-3 pt-4 border-t border-gray-700">
-                  {/* Authors */}
-                  <div className="flex items-start space-x-2 text-sm">
-                    <Users className="w-4 h-4 text-gray-500 mt-1 flex-shrink-0" />
-                    <span className="text-gray-400 line-clamp-2">{publication.authors.join(', ')}</span>
-                  </div>
-
-                  {/* Journal */}
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Building2 className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-400">{publication.journal}</span>
-                  </div>
-
-                  {/* Year */}
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Calendar className="w-4 h-4 text-gray-500" />
-                    <span className="text-gray-400">{publication.year}</span>
-                  </div>
-
-                  {/* Category */}
-                  <div className="flex items-center space-x-2">
-                    <Tag className="w-4 h-4 text-gray-500" />
-                    <span className="px-2 py-1 text-xs font-mono text-green-400 bg-green-400/10 rounded-md border border-green-400/20">
-                      {publication.category ? (publication.category.charAt(0).toUpperCase() + publication.category.slice(1)) : 'Uncategorized'}
-                    </span>
-                  </div>
-
-                  {/* DOI Link */}
-                  {publication.doi && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <Link2 className="w-4 h-4 text-gray-500" />
-                      <a
-                        href={`https://doi.org/${publication.doi}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-green-400 transition-colors"
-                      >
-                        {publication.doi}
-                      </a>
-                    </div>
-                  )}
-
-                  {/* Link to Publication */}
-                  {publication.link && (
-                    <div className="flex items-center space-x-2 text-sm">
-                      <ExternalLink className="w-4 h-4 text-gray-500" />
-                      <a
-                        href={publication.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-green-400 transition-colors"
-                      >
-                        View Publication
-                      </a>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+    <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
+      {/* Terminal Header */}
+      <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className="flex space-x-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+          </div>
+          <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>publications.bib</span>
           </div>
         </div>
-      ))}
+      </div>
+
+      {/* Content */}
+      <div className="p-4">
+        <div className="text-sm text-gray-400 mb-4">
+          <span className="text-green-400">$</span> cat ./publications.bib
+        </div>
+
+        <div className="space-y-4">
+          {publications.map((pub, index) => (
+            <motion.div
+              key={pub.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="group relative bg-gray-800/30 rounded-lg p-4 hover:bg-gray-800/50 transition-all duration-300"
+            >
+              <div className="flex flex-col space-y-2">
+                <h3 className="text-green-400 font-medium group-hover:text-green-300 transition-colors">
+                  {pub.title}
+                </h3>
+                
+                <div className="flex flex-wrap gap-y-2 gap-x-4 text-sm">
+                  {pub.authors && (
+                    <div className="flex items-center text-gray-400">
+                      <Users className="w-4 h-4 mr-1.5 text-gray-500" />
+                      <span>{pub.authors}</span>
+                    </div>
+                  )}
+                  {pub.year && (
+                    <div className="flex items-center text-gray-400">
+                      <Calendar className="w-4 h-4 mr-1.5 text-gray-500" />
+                      <span>{pub.year}</span>
+                    </div>
+                  )}
+                </div>
+
+                {pub.abstract && (
+                  <p className="text-sm text-gray-400 mt-2">{pub.abstract}</p>
+                )}
+
+                {pub.link && (
+                  <a
+                    href={pub.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-sm text-green-400 hover:text-green-300 mt-2 transition-colors"
+                  >
+                    <span>View Publication</span>
+                    <ExternalLink className="w-4 h-4 ml-1.5" />
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-4 pt-4 border-t border-gray-800/30">
+          <div className="text-xs text-gray-500">
+            <span className="text-green-400">$</span> echo "Total publications: {publications.length}"
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

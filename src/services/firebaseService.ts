@@ -111,25 +111,14 @@ export interface Certificate {
 }
 
 export interface Affiliation {
+  id: string;
   acronym: string;
   icon: string;
   name: string;
-  place: string;
-  timeline: string;
-  role: string;
   order: number;
-}
-
-export interface Affiliation {
-  id: string;
-  name: string;
+  place: string;
   role: string;
-  logo: string;
-  url: string;
-  startDate: string;
-  endDate?: string;
-  current: boolean;
-  description: string;
+  timeline: string;
 }
 
 export interface Publication {
@@ -568,7 +557,7 @@ export const getCertificates = async (): Promise<Certificate[]> => {
 export const getAffiliations = async (): Promise<Affiliation[]> => {
   try {
     const affiliationsRef = collection(db, 'affiliations');
-    const q = query(affiliationsRef, orderBy('startDate', 'desc'));
+    const q = query(affiliationsRef, orderBy('order', 'asc'));
     const querySnapshot = await getDocs(q);
     
     return querySnapshot.docs.map(doc => ({

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Terminal, ExternalLink } from 'lucide-react';
+import { Terminal, Building2, Award, Briefcase, GraduationCap, Code } from 'lucide-react';
 import type { Affiliation } from '../services/firebaseService';
 
 interface AffiliationsProps {
@@ -8,16 +8,31 @@ interface AffiliationsProps {
   isLoading: boolean;
 }
 
+const getIconComponent = (iconType: string) => {
+  switch (iconType.toLowerCase()) {
+    case 'tech':
+      return Code;
+    case 'education':
+      return GraduationCap;
+    case 'work':
+      return Briefcase;
+    case 'award':
+      return Award;
+    default:
+      return Building2;
+  }
+};
+
 export function Affiliations({ affiliations, isLoading }: AffiliationsProps) {
   if (isLoading) {
     return (
-      <div className="animate-pulse">
-        <div className="h-8 bg-gray-800/50 rounded w-1/4 mb-4"></div>
-        <div className="space-y-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 bg-gray-800/50 rounded"></div>
-          ))}
-        </div>
+      <div className="animate-pulse space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-gray-800/50 rounded-lg p-4">
+            <div className="h-5 bg-gray-700/50 rounded w-1/4 mb-2"></div>
+            <div className="h-4 bg-gray-700/50 rounded w-3/4"></div>
+          </div>
+        ))}
       </div>
     );
   }
@@ -45,57 +60,53 @@ export function Affiliations({ affiliations, isLoading }: AffiliationsProps) {
           <span className="text-green-400">$</span> ls -la ./affiliations/
         </div>
 
-        <div className="space-y-4">
-          {affiliations.map((affiliation, index) => (
-            <motion.div
-              key={affiliation.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="group relative bg-gray-800/30 rounded-lg p-4 hover:bg-gray-800/50 transition-all duration-300"
-            >
-              <div className="flex items-center space-x-4">
-                {/* Logo */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gray-900/50 p-2 flex items-center justify-center overflow-hidden">
-                  <img
-                    src={affiliation.logo}
-                    alt={`${affiliation.name} logo`}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
+        <div className="space-y-3">
+          {affiliations.map((affiliation, index) => {
+            const IconComponent = getIconComponent(affiliation.icon);
+            
+            return (
+              <motion.div
+                key={affiliation.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="group relative bg-gray-800/30 rounded-lg p-4 hover:bg-gray-800/50 transition-all duration-300"
+              >
+                <div className="flex items-start space-x-4">
+                  {/* Icon */}
+                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-green-400/10 text-green-400 flex items-center justify-center">
+                    <IconComponent className="w-4 h-4" />
+                  </div>
 
-                {/* Content */}
-                <div className="flex-grow">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-green-400 font-medium">
-                        {affiliation.name}
-                      </h3>
-                      <p className="text-sm text-gray-400">{affiliation.role}</p>
+                  {/* Content */}
+                  <div className="flex-grow min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <div className="flex items-center space-x-2">
+                        <h3 className="text-green-400 font-medium truncate">
+                          {affiliation.name}
+                        </h3>
+                        {affiliation.acronym && (
+                          <span className="text-xs text-gray-500">({affiliation.acronym})</span>
+                        )}
+                      </div>
+                      <div className="text-xs text-gray-500 whitespace-nowrap">
+                        {affiliation.timeline}
+                      </div>
                     </div>
-                    <div className="text-xs text-gray-500">
-                      {affiliation.startDate} - {affiliation.current ? 'Present' : affiliation.endDate}
+                    <div className="mt-1 flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm">
+                      <span className="text-gray-400">{affiliation.role}</span>
+                      {affiliation.place && (
+                        <>
+                          <span className="hidden sm:inline text-gray-600">•</span>
+                          <span className="text-gray-500">{affiliation.place}</span>
+                        </>
+                      )}
                     </div>
                   </div>
-                  <p className="mt-2 text-sm text-gray-400">
-                    {affiliation.description}
-                  </p>
                 </div>
-              </div>
-
-              {/* Link Overlay */}
-              <a
-                href={affiliation.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 rounded-lg ring-1 ring-transparent hover:ring-green-400/30 transition-all duration-300"
-              >
-                <span className="absolute top-4 right-4 text-gray-500 group-hover:text-green-400 transition-colors duration-300">
-                  <ExternalLink className="w-4 h-4" />
-                </span>
-              </a>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         <div className="mt-4 pt-4 border-t border-gray-800/30">
