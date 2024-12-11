@@ -168,38 +168,80 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed inset-0 min-h-screen bg-gray-900/98 backdrop-blur-lg md:hidden pt-20"
+            className="fixed inset-0 min-h-screen bg-gray-900/95 backdrop-blur-md md:hidden pt-20"
           >
-            <motion.div
-              className="flex flex-col items-center justify-center min-h-[calc(100vh-5rem)] space-y-6 px-4"
-              variants={menuVariants}
-            >
-              {navItems.map((item) => (
-                <motion.div key={item.path} variants={itemVariants} className="w-full max-w-sm">
-                  <Link
-                    to={item.path}
-                    onClick={() => setIsMenuOpen(false)}
-                    className={`w-full px-6 py-3 rounded-lg text-base sm:text-lg transition-all duration-300 flex items-center justify-center ${location.pathname === item.path
-                      ? 'bg-green-600/20 text-green-400'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-                      }`}
-                  >
-                    <span className="text-green-400 mr-2">
-                      {item.label}
-                    </span>
-                  </Link>
-                </motion.div>
-              ))}
-              <motion.div variants={itemVariants} className="w-full max-w-sm">
-                <Link
-                  to="/contact"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full px-6 py-3 bg-green-500 hover:bg-green-600 text-black font-medium rounded-lg text-base sm:text-lg transition-all duration-300 flex items-center justify-center"
-                >
-                  <span className="mr-2">./</span>Let's Talk
-                </Link>
+            {/* Terminal Window */}
+            <div className="mx-4 mt-4 rounded-lg border border-gray-700/50 overflow-hidden bg-gray-900/80">
+              {/* Terminal Header */}
+              <div className="px-4 py-2 bg-gray-800/50 border-b border-gray-700/50 flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="flex space-x-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                  </div>
+                  <span className="text-xs text-gray-400 font-mono">navigation.sh</span>
+                </div>
+              </div>
+
+              {/* Terminal Content */}
+              <motion.div
+                className="p-4 font-mono space-y-4"
+                variants={menuVariants}
+              >
+                {/* Command Prompt */}
+                <div className="text-sm text-gray-400 mb-6">
+                  <span className="text-green-400">$</span> ls -la ./pages/
+                </div>
+
+                {/* Navigation Items */}
+                <div className="space-y-3">
+                  {navItems.map((item, index) => (
+                    <motion.div key={item.path} variants={itemVariants}>
+                      <Link
+                        to={item.path}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`block w-full transition-all duration-300 group ${
+                          location.pathname === item.path
+                            ? 'text-green-400'
+                            : 'text-gray-400 hover:text-green-400'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-3 px-3 py-2 rounded-md bg-gray-800/30 hover:bg-gray-800/50">
+                          <span className="text-green-400/70">$</span>
+                          <span className="text-sm">{item.label}</span>
+                          {location.pathname === item.path && (
+                            <span className="ml-auto text-xs text-green-400/70">(active)</span>
+                          )}
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+
+                  {/* Contact Button */}
+                  <motion.div variants={itemVariants}>
+                    <Link
+                      to="/contact"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block w-full transition-all duration-300"
+                    >
+                      <div className="flex items-center space-x-3 px-3 py-2 rounded-md bg-green-400/10 hover:bg-green-400/20">
+                        <span className="text-green-400">$</span>
+                        <span className="text-sm text-green-400">./Let's Talk</span>
+                        <span className="ml-auto text-xs text-green-400/70">--open</span>
+                      </div>
+                    </Link>
+                  </motion.div>
+                </div>
+
+                {/* Terminal Footer */}
+                <div className="mt-8 pt-4 border-t border-gray-700/50">
+                  <div className="text-xs text-gray-500">
+                    <span className="text-green-400/70">$</span> echo "Use 'Esc' to close"
+                  </div>
+                </div>
               </motion.div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
