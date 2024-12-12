@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Terminal, ExternalLink, Download } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
+import { TerminalLoader } from '../components/TerminalLoader';
 
 export function Resume() {
   // Original URL: https://drive.google.com/file/d/1KFrWBTHO5dlHXcP-TZhlsuUhV4SvIqBo/view
@@ -8,6 +10,28 @@ export function Resume() {
   const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
   const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
   const viewUrl = `https://drive.google.com/file/d/${fileId}/view`;
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <TerminalLoader
+        title="resume_loader.sh"
+        steps={[
+          { text: "Fetching resume data", status: "completed" },
+          { text: "Loading experience details", status: "completed" },
+          { text: "Processing education info", status: "completed" },
+          { text: "Rendering resume content", status: "loading" },
+        ]}
+      />
+    );
+  }
 
   return (
     <div className="bg-gray-950 min-h-screen font-mono pt-20">

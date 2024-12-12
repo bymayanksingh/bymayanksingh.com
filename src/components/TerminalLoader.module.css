@@ -1,0 +1,22 @@
+.loadingDots {
+  display: inline-block;
+  animation: loadingDots 1.5s infinite;
+}
+
+.loadingBar {
+  width: 75%;
+  animation: loadingBar 2s ease-in-out infinite;
+}
+
+@keyframes loadingDots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60% { content: '...'; }
+  80%, 100% { content: ''; }
+}
+
+@keyframes loadingBar {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}

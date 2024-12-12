@@ -1,10 +1,35 @@
-import { Terminal, Calendar, Clock, Tag, Info, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Terminal, Calendar, Clock, Tag, Info, ArrowRight, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { blogPosts } from '../data/blogData';
 import { PageHeader } from '../components/PageHeader';
+import { TerminalLoader } from '../components/TerminalLoader';
 
 export function Blog() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return (
+            <TerminalLoader
+                title="blog_loader.sh"
+                steps={[
+                    { text: "Fetching blog posts", status: "completed" },
+                    { text: "Loading article metadata", status: "completed" },
+                    { text: "Processing markdown content", status: "completed" },
+                    { text: "Rendering blog interface", status: "loading" },
+                ]}
+            />
+        );
+    }
+
     return (
         <div className="min-h-screen bg-gray-950 pt-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -123,4 +148,4 @@ export function Blog() {
             </div>
         </div>
     );
-} 
+}

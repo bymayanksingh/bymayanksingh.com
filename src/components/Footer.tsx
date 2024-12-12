@@ -47,25 +47,17 @@ export function Footer() {
       href: '/projects',
     },
     {
-      name: 'Photography',
-      href: '/photography',
-    },    
-    {
-      name: 'Blog',
-      href: '/blog',
-    },
-    {
       name: 'About',
       href: '/about',
     },
     {
-      name: 'Resume',
-      href: '/resume',
-    },
-    {
       name: 'Contact',
       href: '/contact',
-    }
+    },
+    {
+      name: 'Resume',
+      href: about?.resume || '#',
+    },
   ];
 
   return (

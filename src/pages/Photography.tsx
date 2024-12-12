@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { PageHeader } from '../components/PageHeader';
 import { Terminal, Camera, Image as ImageIcon } from 'lucide-react';
+import { TerminalLoader } from '../components/TerminalLoader';
 
 // Sample images data (to be replaced with Firebase data later)
 const sampleImages = [
@@ -42,6 +43,29 @@ const sampleImages = [
 
 export function Photography() {
   const [selectedImage, setSelectedImage] = useState<typeof sampleImages[0] | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      setLoading(false);
+    };
+
+    fetchPhotos();
+  }, []);
+
+  if (loading) {
+    return (
+      <TerminalLoader
+        title="photo_gallery.sh"
+        steps={[
+          { text: "Connecting to photo server", status: "completed" },
+          { text: "Loading image metadata", status: "completed" },
+          { text: "Processing image thumbnails", status: "completed" },
+          { text: "Preparing gallery view", status: "loading" },
+        ]}
+      />
+    );
+  }
 
   return (
     <div className="bg-gray-950 min-h-screen font-mono pt-20">

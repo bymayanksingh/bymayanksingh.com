@@ -15,6 +15,7 @@ import { Awards } from '../components/Awards';
 import { PageHeader } from '../components/PageHeader';
 import { Affiliations } from '../components/Affiliations';
 import { motion } from 'framer-motion';
+import { TerminalLoader } from '../components/TerminalLoader';
 
 interface Certificate {
   title: string;
@@ -98,12 +99,16 @@ export function About() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
-        <div className="flex items-center space-x-3 text-green-400">
-          <Command className="w-5 h-5 animate-spin" />
-          <span>Loading Profile Data...</span>
-        </div>
-      </div>
+      <TerminalLoader
+        title="profile_loader.sh"
+        steps={[
+          { text: "Establishing database connection", status: "completed" },
+          { text: "Loading profile information", status: "completed" },
+          { text: "Fetching skills and certifications", status: "completed" },
+          { text: "Processing achievements and publications", status: "completed" },
+          { text: "Rendering profile content", status: "loading" },
+        ]}
+      />
     );
   }
 

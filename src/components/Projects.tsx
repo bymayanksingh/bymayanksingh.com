@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Terminal, Code, GitBranch, ArrowRight, Command } from 'lucide-react';
 import { getProjects, type Project } from '../services/firebaseService';
 import { ImageFallback } from '../components/ImageFallback';
+import { TerminalLoader } from './TerminalLoader';
 
 interface ProjectsProps {
   showAll?: boolean;
@@ -68,26 +69,45 @@ export function Projects({ showAll = false }: ProjectsProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 font-mono flex items-center justify-center">
-        <div className="flex items-center space-x-3 text-green-400">
-          <Command className="w-5 h-5 animate-spin" />
-          <span>Loading Projects...</span>
-        </div>
-      </div>
+      <TerminalLoader
+        title="projects_loader.sh"
+        steps={[
+          { text: "Establishing database connection", status: "completed" },
+          { text: "Fetching project data", status: "completed" },
+          { text: "Processing project images", status: "completed" },
+          { text: "Preparing project gallery", status: "loading" },
+        ]}
+      />
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-400 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-gray-800 text-green-400 rounded-lg hover:bg-gray-700 transition-colors"
-          >
-            Try Again
-          </button>
+      <div className="min-h-screen bg-gray-950 font-mono flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700 shadow-2xl shadow-purple-500/5">
+            <div className="px-4 py-2 bg-gray-900/90 border-b border-gray-700 flex items-center justify-between">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+              </div>
+              <span className="text-xs text-gray-400">error.sh</span>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="flex items-center space-x-2 text-red-400">
+                <Terminal className="w-4 h-4" />
+                <span className="text-gray-400">$</span>
+                <span className="text-red-300">Error: {error}</span>
+              </div>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-gray-800 text-green-400 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -95,9 +115,25 @@ export function Projects({ showAll = false }: ProjectsProps) {
 
   if (!projects.length) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-400 mb-4">No projects found</p>
+      <div className="min-h-screen bg-gray-950 font-mono flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          <div className="bg-gray-800/80 backdrop-blur-sm rounded-lg overflow-hidden border border-gray-700 shadow-2xl shadow-purple-500/5">
+            <div className="px-4 py-2 bg-gray-900/90 border-b border-gray-700 flex items-center justify-between">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+              </div>
+              <span className="text-xs text-gray-400">empty.sh</span>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center space-x-2 text-yellow-400">
+                <Terminal className="w-4 h-4" />
+                <span className="text-gray-400">$</span>
+                <span className="text-yellow-300">No projects found</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

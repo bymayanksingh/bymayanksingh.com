@@ -7,6 +7,7 @@ import { getAbout, submitMessage } from '../services/firebaseService';
 import type { About } from '../services/firebaseService';
 import { motion } from 'framer-motion';
 import { PageHeader } from '../components/PageHeader';
+import { TerminalLoader } from '../components/TerminalLoader';
 
 export function Contact() {
   const [about, setAbout] = useState<About | null>(null);
@@ -22,14 +23,17 @@ export function Contact() {
     type: 'idle' | 'loading' | 'success' | 'error';
     message?: string;
   }>({ type: 'idle' });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAboutData() {
       try {
         const data = await getAbout();
         setAbout(data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching about data:', error);
+        setLoading(false);
       }
     }
     fetchAboutData();
@@ -82,6 +86,20 @@ export function Contact() {
       });
     }
   };
+
+  if (loading) {
+    return (
+      <TerminalLoader
+        title="contact_init.sh"
+        steps={[
+          { text: "Loading contact information", status: "completed" },
+          { text: "Initializing form components", status: "completed" },
+          { text: "Setting up secure connection", status: "completed" },
+          { text: "Preparing contact form", status: "loading" },
+        ]}
+      />
+    );
+  }
 
   if (status.type === 'loading') {
     return (
