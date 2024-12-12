@@ -150,6 +150,18 @@ export interface Award {
   order: number;
 }
 
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  description: string;
+  review: string;
+  rating: number;
+  coverImage: string;
+  genre: string;
+  readDate: string;
+}
+
 // Helper function to get Google Drive URL
 const getGoogleDriveUrl = (url: string): string => {
   if (!url) return '';
@@ -626,6 +638,21 @@ export const getAwards = async (): Promise<Award[]> => {
     return [];
   }
 };
+
+// Books
+export async function getBooks(): Promise<Book[]> {
+  try {
+    const booksRef = collection(db, 'books');
+    const snapshot = await getDocs(booksRef);
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Book));
+  } catch (error) {
+    console.error('Error fetching books:', error);
+    return [];
+  }
+}
 
 // Messages
 export const submitMessage = async (messageData: Omit<Message, 'id' | 'createdAt'>): Promise<{ success: boolean; error?: string }> => {

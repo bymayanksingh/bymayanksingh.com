@@ -14,6 +14,7 @@ const navItems = [
   { path: '/projects', label: './Projects', ariaLabel: 'View Engineering Projects' },
   { path: '/photography', label: './Photography', ariaLabel: 'View Photography Gallery' },
   { path: '/music', label: './Music', ariaLabel: 'View Music & Playlists' },
+  { path: '/books', label: './Books', ariaLabel: 'View Reading List' },
   { path: '/blog', label: './Blog', ariaLabel: 'Read Blog Posts' },
   { path: '/about', label: './About', ariaLabel: 'Learn more about the Engineer' },
   { path: '/resume', label: './Resume', ariaLabel: 'View Resume' }
@@ -94,7 +95,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
           : 'bg-transparent py-3 sm:py-5'
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-full">
             {/* Logo/Brand */}
             <Link
@@ -109,16 +110,17 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-1">
+            <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               {navItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}
                   aria-label={item.ariaLabel}
-                  className={`px-4 py-2 rounded-md text-sm transition-all duration-300 ${location.pathname === item.path
-                    ? 'text-green-400 bg-green-400/10 hover:bg-green-400/20'
-                    : 'text-gray-400 hover:text-green-400 hover:bg-gray-800/50'
-                    }`}
+                  className={`px-2 lg:px-3 py-2 text-sm rounded-lg transition-colors duration-300 ${
+                    location.pathname === item.path
+                      ? 'text-green-400 bg-gray-800/50'
+                      : 'text-gray-400 hover:text-green-400 hover:bg-gray-800/30'
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -134,119 +136,68 @@ export function Navigation({ isMenuOpen, setIsMenuOpen }: NavigationProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden relative z-50 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-green-400 transition-colors duration-300"
+              className="md:hidden relative z-50 p-2 -mr-2 text-gray-400 hover:text-green-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 transition-colors"
+              aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
             >
-              <div className="relative w-5 h-4">
-                <span
-                  className={`absolute w-5 h-0.5 transform transition-all duration-300 ${isMenuOpen
-                    ? 'bg-green-400 rotate-45 top-2'
-                    : 'bg-gray-400 top-0'
-                    }`}
-                />
-                <span
-                  className={`absolute w-5 h-0.5 top-2 transition-all duration-300 ${isMenuOpen
-                    ? 'opacity-0 bg-green-400'
-                    : 'opacity-100 bg-gray-400'
-                    }`}
-                />
-                <span
-                  className={`absolute w-5 h-0.5 transform transition-all duration-300 ${isMenuOpen
-                    ? 'bg-green-400 -rotate-45 top-2'
-                    : 'bg-gray-400 top-4'
-                    }`}
-                />
-              </div>
+              <span className="sr-only">Open menu</span>
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
             </button>
+
+            {/* Mobile Menu */}
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  initial="closed"
+                  animate="open"
+                  exit="closed"
+                  variants={menuVariants}
+                  className="absolute top-0 inset-x-0 py-20 px-4 md:hidden bg-gray-900/95 backdrop-blur-md min-h-screen z-40 border-b border-gray-800/50"
+                >
+                  <div className="grid gap-2">
+                    {navItems.map((item) => (
+                      <motion.div key={item.path} variants={itemVariants}>
+                        <Link
+                          to={item.path}
+                          aria-label={item.ariaLabel}
+                          className={`block px-4 py-3 rounded-lg text-sm transition-colors duration-300 ${
+                            location.pathname === item.path
+                              ? 'text-green-400 bg-gray-800/50'
+                              : 'text-gray-400 hover:text-green-400 hover:bg-gray-800/30'
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </nav>
-
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
-            className="fixed inset-0 min-h-screen bg-gray-900/95 backdrop-blur-md md:hidden pt-20"
-          >
-            {/* Terminal Window */}
-            <div className="mx-4 mt-4 rounded-lg border border-gray-700/50 overflow-hidden bg-gray-900/80">
-              {/* Terminal Header */}
-              <div className="px-4 py-2 bg-gray-800/50 border-b border-gray-700/50 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="flex space-x-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                    <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                  </div>
-                  <span className="text-xs text-gray-400 font-mono">navigation.sh</span>
-                </div>
-              </div>
-
-              {/* Terminal Content */}
-              <motion.div
-                className="p-4 font-mono space-y-4"
-                variants={menuVariants}
-              >
-                {/* Command Prompt */}
-                <div className="text-sm text-gray-400 mb-6">
-                  <span className="text-green-400">$</span> ls -la ./pages/
-                </div>
-
-                {/* Navigation Items */}
-                <div className="space-y-3">
-                  {navItems.map((item, index) => (
-                    <motion.div key={item.path} variants={itemVariants}>
-                      <Link
-                        to={item.path}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={`block w-full transition-all duration-300 group ${
-                          location.pathname === item.path
-                            ? 'text-green-400'
-                            : 'text-gray-400 hover:text-green-400'
-                        }`}
-                      >
-                        <div className="flex items-center space-x-3 px-3 py-2 rounded-md bg-gray-800/30 hover:bg-gray-800/50">
-                          <span className="text-green-400/70">$</span>
-                          <span className="text-sm">{item.label}</span>
-                          {location.pathname === item.path && (
-                            <span className="ml-auto text-xs text-green-400/70">(active)</span>
-                          )}
-                        </div>
-                      </Link>
-                    </motion.div>
-                  ))}
-
-                  {/* Contact Button */}
-                  <motion.div variants={itemVariants}>
-                    <Link
-                      to="/contact"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="block w-full transition-all duration-300"
-                    >
-                      <div className="flex items-center space-x-3 px-3 py-2 rounded-md bg-green-400/10 hover:bg-green-400/20">
-                        <span className="text-green-400">$</span>
-                        <span className="text-sm text-green-400">./Let's Talk</span>
-                        <span className="ml-auto text-xs text-green-400/70">--open</span>
-                      </div>
-                    </Link>
-                  </motion.div>
-                </div>
-
-                {/* Terminal Footer */}
-                <div className="mt-8 pt-4 border-t border-gray-700/50">
-                  <div className="text-xs text-gray-500">
-                    <span className="text-green-400/70">$</span> echo "Use 'Esc' to close"
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </header>
   );
 }

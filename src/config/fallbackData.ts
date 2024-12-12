@@ -1,9 +1,9 @@
-import type { Hero, Project, Testimonial, TimelineItem, About, Contact, Stats } from '../services/firebaseService';
+import type { Hero, Project, Testimonial, TimelineItem, About, Contact, Stats, Book } from '../services/firebaseService';
 
 export const fallbackHero: Hero = {
   name: "Mayank Singh",
-  title: "Architect & Designer",
-  subtitle: "Creating spaces that inspire",
+  title: "Software Engineer",
+  subtitle: "Building innovative solutions with code",
   backgroundImage: "/images/hero-bg.jpg",
   stats: {
     projects: 50,
@@ -14,29 +14,29 @@ export const fallbackHero: Hero = {
 
 export const fallbackProjects: Project[] = [
   {
-    title: "Urban Harmony Center",
-    category: "Commercial",
-    location: "Mumbai, India",
+    title: "Cloud-Native Analytics Platform",
+    category: "Enterprise Software",
+    location: "Remote",
     date: "2023",
     year: 2023,
     coverImage: "/images/projects/project1.jpg",
-    description: "A modern commercial complex focusing on sustainable design",
-    client: "Urban Development Corp",
-    area: "50,000 sq ft",
+    description: "A scalable analytics platform built with modern cloud technologies",
+    client: "Tech Solutions Inc",
+    area: "Backend Infrastructure",
     status: "Completed",
     details: [
-      "Sustainable design principles",
-      "LEED Gold certification",
-      "Innovative space utilization"
+      "Microservices architecture",
+      "Kubernetes deployment",
+      "Real-time data processing"
     ],
     gallery: [
       {
         url: "/images/projects/project1-1.jpg",
-        caption: "Main entrance view"
+        caption: "System Architecture"
       },
       {
         url: "/images/projects/project1-2.jpg",
-        caption: "Interior atrium"
+        caption: "Dashboard Interface"
       }
     ]
   }
@@ -46,8 +46,8 @@ export const fallbackTestimonials: Testimonial[] = [
   {
     id: "1",
     name: "Jane Smith",
-    role: "CEO, Urban Development Corp",
-    content: "Working with Mayank was an incredible experience. Her attention to detail and innovative approach to sustainable design exceeded our expectations.",
+    role: "CTO, Tech Solutions Inc",
+    content: "Mayank's expertise in cloud architecture and system design helped us build a highly scalable and maintainable platform. His attention to code quality and performance was exceptional.",
     image: "/images/testimonials/john.jpg"
   }
 ];
@@ -56,58 +56,112 @@ export const fallbackTimeline: TimelineItem[] = [
   {
     id: "1",
     year: 2023,
-    event: "Lead Architect, Urban Harmony Center",
-    description: "Leading innovative sustainable architecture projects",
-    icon: "Building2",
+    event: "Lead Software Engineer, Cloud Platform",
+    description: "Leading cloud-native development projects",
+    icon: "Code",
     color: "text-emerald-600",
-    details: "Spearheaded multiple award-winning sustainable design projects"
+    details: "Architected and implemented scalable cloud solutions using modern technologies"
   },
   {
     id: "2",
     year: 2021,
-    event: "International Architecture Award",
-    description: "Recognized for excellence in sustainable design",
+    event: "Innovation in Tech Award",
+    description: "Recognized for technical excellence",
     icon: "Award",
     color: "text-blue-600",
-    details: "Received the prestigious International Architecture Award"
+    details: "Received award for innovative contributions to open-source projects"
   },
   {
     id: "3",
     year: 2019,
-    event: "Founded Studio Arc",
-    description: "Established independent architectural practice",
+    event: "Senior Software Engineer",
+    description: "Full-stack development and system design",
     icon: "Briefcase",
     color: "text-purple-600",
-    details: "Launched an independent practice focusing on sustainable solutions"
+    details: "Led development of enterprise-scale applications and mentored junior developers"
   }
 ];
 
 export const fallbackAbout: About = {
   id: "1",
   name: "Mayank Singh",
-  title: "Lead Architect & Designer",
-  description: "Passionate architect with 8+ years of experience in sustainable design and urban development.",
+  title: "Software Engineer",
+  description: "Passionate software engineer with 8+ years of experience in full-stack development, cloud architecture, and system design.",
   image: "/images/about/pmayank.jpg",
-  email: "contact@pmayank.com",
+  email: "contact@bymayanksingh.com",
   phone: "+91 98765 43210",
-  linkedin: "https://linkedin.com/in/pmayank",
-  resume: "/files/pmayank-resume.pdf"
+  linkedin: "https://linkedin.com/in/bymayanksingh",
+  resume: "/files/mayank-resume.pdf",
+  city: "Bangalore",
+  country: "India",
+  shortDescription: "Software Engineer specializing in cloud-native solutions",
+  services: ["Full-stack Development", "Cloud Architecture", "System Design", "DevOps"],
 };
 
 export const fallbackContact: Contact = {
   title: "Get in Touch",
-  description: "Let's discuss your architectural vision",
-  email: "contact@pmayank.com",
+  description: "Let's discuss your next software project",
+  email: "contact@bymayanksingh.com",
   phone: "+91 98765 43210",
-  address: "Mumbai, India",
-  availability: "Monday - Friday, 9:00 AM - 6:00 PM"
+  address: "Bangalore, India",
+  socials: {
+    github: "https://github.com/bymayanksingh",
+    linkedin: "https://linkedin.com/in/bymayanksingh",
+    twitter: "https://twitter.com/bymayanksingh"
+  }
 };
 
 export const fallbackStats: Stats = {
-  id: 'stats',
-  items: [
-    { icon: 'Building2', label: 'Projects', value: '50+' },
-    { icon: 'Award', label: 'Awards', value: '12' },
-    { icon: 'Users', label: 'Clients', value: '100+' }
-  ]
+  projects: 50,
+  experience: 8,
+  awards: 10,
+  clients: 20
 };
+
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  description: string;
+  review: string;
+  rating: number;
+  coverImage: string;
+  genre: string;
+  readDate: string;
+}
+
+export const fallbackBooks: Book[] = [
+  {
+    id: "1",
+    title: "Clean Code",
+    author: "Robert C. Martin",
+    description: "A handbook of agile software craftsmanship that revolutionizes the way we think about programming.",
+    review: "This book fundamentally changed how I approach software development. The principles of clean code have become an integral part of my daily coding practices.",
+    rating: 5,
+    coverImage: "https://m.media-amazon.com/images/I/41xShlnTZTL._SX376_BO1,204,203,200_.jpg",
+    genre: "Software Engineering",
+    readDate: "2023-06"
+  },
+  {
+    id: "2",
+    title: "Designing Data-Intensive Applications",
+    author: "Martin Kleppmann",
+    description: "A deep dive into the principles and practices of modern data system architecture.",
+    review: "An exceptional resource for understanding distributed systems. The author's clear explanations of complex concepts make this a must-read for any software engineer working with data systems.",
+    rating: 5,
+    coverImage: "https://m.media-amazon.com/images/I/51ZSpMl1-LL._SX379_BO1,204,203,200_.jpg",
+    genre: "System Design",
+    readDate: "2023-08"
+  },
+  {
+    id: "3",
+    title: "The Pragmatic Programmer",
+    author: "Andrew Hunt, David Thomas",
+    description: "A collection of practical approaches to software development that will make you a better programmer.",
+    review: "This book offers timeless advice for software development. The concepts of DRY, orthogonality, and tracer bullets have greatly influenced my approach to problem-solving.",
+    rating: 4,
+    coverImage: "https://m.media-amazon.com/images/I/51W1sBPO7tL._SX380_BO1,204,203,200_.jpg",
+    genre: "Software Engineering",
+    readDate: "2023-10"
+  }
+];

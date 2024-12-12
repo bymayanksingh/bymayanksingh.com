@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Projects as ProjectsComponent } from '../components/Projects';
-import { Terminal, Code, Folder, Search } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { TerminalLoader } from '../components/TerminalLoader'; // assuming TerminalLoader is in this location
 
