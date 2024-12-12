@@ -363,6 +363,24 @@ export function Hero() {
                     </Link>
 
                     <Link
+                      to="/music"
+                      className="group relative flex items-center space-x-3 bg-gray-900/50 hover:bg-gray-900/80 border border-gray-700/50 hover:border-green-500/50 rounded-lg px-6 py-4 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10"
+                    >
+                      <div className="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5 text-green-400 group-hover:text-green-300 transition-colors">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                        </svg>
+                      </div>
+                      <div className="flex-grow">
+                        <h3 className="text-green-400 group-hover:text-green-300 font-medium transition-colors">Music & Playlists</h3>
+                        <p className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">Check out my music taste</p>
+                      </div>
+                      <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowRight className="w-5 h-5 text-green-400" />
+                      </div>
+                    </Link>
+
+                    <Link
                       to="/contact"
                       className="group relative flex items-center space-x-3 bg-gray-900/50 hover:bg-gray-900/80 border border-gray-700/50 hover:border-green-500/50 rounded-lg px-6 py-4 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10"
                     >

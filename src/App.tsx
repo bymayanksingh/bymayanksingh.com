@@ -18,6 +18,7 @@ import { Blog } from './pages/Blog';
 import { BlogPost } from './pages/BlogPost';
 import { NotFound } from './pages/NotFound';
 import { Photography } from './pages/Photography';
+import { Music } from './pages/Music';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,6 +54,7 @@ export default function App() {
             <Route path="/photography" element={<Photography />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/music" element={<Music />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
