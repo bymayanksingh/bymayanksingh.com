@@ -204,7 +204,7 @@ export function Hero() {
           className="space-y-12"
         >
           {/* Terminal Windows Container */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 grid-cols-1">
             {/* Command Terminal */}
             <motion.div
               variants={itemVariants}
@@ -233,28 +233,28 @@ export function Hero() {
                   className="text-gray-300 p-4 rounded-lg bg-gray-900/50 border border-gray-700/50"
                 >
                   <span className="text-blue-400">class</span> <span className="text-yellow-400 font-bold">Developer</span> {'{'}
-                  <div className="pl-4 space-y-2">
-                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                  <div className="pl-4 space-y-2 overflow-x-auto">
+                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors min-w-max">
                       <span className="text-purple-400">name:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{aboutData?.name || 'Mayank'}"</span>
                     </div>
-                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors min-w-max">
                       <span className="text-purple-400">role:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{aboutData?.title || 'Software Engineer'}"</span>
                     </div>
-                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors min-w-max">
                       <span className="text-purple-400">description:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{aboutData?.shortDescription || 'Software Engineer & Former Architect'}"</span>
                     </div>
-                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors min-w-max">
                       <span className="text-purple-400">location:</span> <span className="text-green-300 group-hover:text-green-400 transition-colors">"{[aboutData?.city, aboutData?.country].filter(Boolean).join(', ')}"</span>
                     </div>
-                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors min-w-max">
                       <span className="text-purple-400">services:</span> [
                       <span className="text-green-300 group-hover:text-green-400 transition-colors">"{aboutData?.services?.join('", "') || 'Frontend, Backend, Cloud, Architecture'}"</span>]
                     </div>
-                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors">
+                    <div className="group hover:bg-gray-800/30 p-1 rounded transition-colors min-w-max">
                       <span className="text-purple-400">contact:</span> {'{'}
                       <div className="pl-4">
-                        <div>email: "<span className="text-green-300 group-hover:text-green-400 transition-colors">{aboutData?.email}</span>"</div>
-                        <div>linkedin: "<span className="text-green-300 group-hover:text-green-400 transition-colors">{aboutData?.linkedin}</span>"</div>
+                        <div className="break-all">email: "<span className="text-green-300 group-hover:text-green-400 transition-colors">{aboutData?.email}</span>"</div>
+                        <div className="break-all">linkedin: "<span className="text-green-300 group-hover:text-green-400 transition-colors">{aboutData?.linkedin}</span>"</div>
                       </div>
                       {'}'}
                     </div>
@@ -345,7 +345,7 @@ export function Hero() {
                     <span className="text-green-300">./execute_actions.sh</span>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-full">
                     <Link
                       to="/projects"
                       className="group relative flex items-center space-x-3 bg-gray-900/50 hover:bg-gray-900/80 border border-gray-700/50 hover:border-green-500/50 rounded-lg px-6 py-4 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10"
