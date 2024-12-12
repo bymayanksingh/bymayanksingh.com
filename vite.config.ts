@@ -10,8 +10,8 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: 'Professional Software Engineer',
-        short_name: 'Arch Portfolio',
-        description: 'Professional Software Engineerure portfolio showcasing innovative design and sustainable solutions',
+        short_name: 'Portfolio',
+        description: 'Professional Software Engineering portfolio showcasing innovative Software solutions',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',

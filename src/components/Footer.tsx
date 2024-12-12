@@ -47,6 +47,22 @@ export function Footer() {
       href: '/projects',
     },
     {
+      name: 'Photography',
+      href: '/photography',
+    },
+    {
+      name: 'Music',
+      href: '/music',
+    },
+    {
+      name: 'Books',
+      href: '/books',
+    },
+    {
+      name: 'Blog',
+      href: '/blog',
+    },
+    {
       name: 'About',
       href: '/about',
     },
@@ -56,7 +72,7 @@ export function Footer() {
     },
     {
       name: 'Resume',
-      href: about?.resume || '#',
+      href: '/resume'
     },
   ];
 
