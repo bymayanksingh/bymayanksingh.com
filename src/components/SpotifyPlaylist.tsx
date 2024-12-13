@@ -1,4 +1,3 @@
-import { Command } from 'lucide-react';
 import { fallbackPlaylists } from '../config/fallbackData';
 
 interface Playlist {

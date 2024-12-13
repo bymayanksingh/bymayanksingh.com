@@ -135,14 +135,6 @@ export function Resume() {
             </Suspense>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="mt-4 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-gray-800/50 border border-gray-700/50">
-            <Terminal className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-green-400" />
-            <span className="text-xs sm:text-sm text-gray-400">Last updated: {new Date().toLocaleDateString()}</span>
-          </div>
-        </div>
       </div>
     </div>
   );
