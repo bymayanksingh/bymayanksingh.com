@@ -1,12 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ImageModal } from '../components/ImageModal';
 import { usePhotos } from '../hooks/usePhotos';
 import { Terminal } from 'lucide-react';
 
+// Lazy load images
+const LazyImage = ({ src, alt, className, onLoad }: { 
+  src: string; 
+  alt: string; 
+  className?: string;
+  onLoad?: () => void;
+}) => {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <>
+      {!loaded && (
+        <div className="absolute inset-0 bg-gray-800 animate-pulse rounded-lg" />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`${className} ${!loaded ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        onLoad={() => {
+          setLoaded(true);
+          onLoad?.();
+        }}
+      />
+    </>
+  );
+};
+
+// Loading skeleton
+const PhotoSkeleton = () => (
+  <div className="aspect-square relative overflow-hidden rounded-lg bg-gray-800/50">
+    <div className="absolute inset-0 bg-gradient-to-r from-gray-800/0 via-gray-800/50 to-gray-800/0 animate-shimmer" />
+  </div>
+);
+
 export function Photography() {
   const { photos, isLoading, error } = usePhotos();
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
 
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
@@ -28,10 +63,27 @@ export function Photography() {
     }
   };
 
+  const handleImageLoad = (id: string) => {
+    setLoadedImages(prev => new Set([...prev, id]));
+  };
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-green-400">Loading photos...</div>
+      <div className="container mx-auto px-4 py-24">
+        <div className="mb-8">
+          <div className="flex items-center space-x-2 text-green-400 mb-2">
+            <Terminal size={20} />
+            <h1 className="text-xl font-mono">./photography</h1>
+          </div>
+          <p className="text-gray-400 font-mono text-sm">
+            Loading photo gallery...
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <PhotoSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }
@@ -69,10 +121,11 @@ export function Photography() {
             onClick={() => handleImageClick(index)}
           >
             <div className="absolute inset-0">
-              <img
+              <LazyImage
                 src={photo.url}
                 alt={photo.caption || `Photo ${index + 1}`}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                onLoad={() => handleImageLoad(photo.id)}
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -112,7 +165,7 @@ export function Photography() {
 
             return (
               <>
-                <img
+                <LazyImage
                   src={photo.url}
                   alt={photo.caption || ''}
                   className="max-h-[calc(80vh-8rem)] object-contain rounded-lg"

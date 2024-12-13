@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Command, Music } from 'lucide-react';
+import { fallbackSpotifyData } from '../config/fallbackData';
 
 interface SpotifyData {
   isPlaying: boolean;
@@ -11,29 +12,49 @@ interface SpotifyData {
 }
 
 export function SpotifyNowPlaying() {
-  const [data, setData] = useState<SpotifyData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<SpotifyData>(fallbackSpotifyData);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/spotify/now-playing');
-        const data = await response.json();
-        setData(data);
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch('/api/spotify/now-playing', {
+          signal: controller.signal
+        });
+        
+        if (!isMounted) return;
+        
+        const newData = await response.json();
+        setData(newData);
       } catch (error) {
+        if (!isMounted) return;
         console.error('Error fetching Spotify data:', error);
+        setError(error instanceof Error ? error : new Error('Failed to fetch Spotify data'));
       } finally {
+        if (!isMounted) return;
         setLoading(false);
       }
     };
 
     fetchData();
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+    // Refresh every minute instead of 30 seconds to reduce API calls
+    const interval = setInterval(fetchData, 60000);
+    
+    return () => {
+      isMounted = false;
+      controller.abort();
+      clearInterval(interval);
+    };
   }, []);
 
-  if (loading) {
+  if (loading && !data.isPlaying) {
     return (
       <div className="flex items-center space-x-2 text-green-400/90">
         <Command className="w-4 h-4 animate-spin" />
@@ -42,7 +63,7 @@ export function SpotifyNowPlaying() {
     );
   }
 
-  if (!data?.isPlaying) {
+  if (!data.isPlaying) {
     return (
       <div className="flex items-center space-x-2 text-gray-400/80">
         <Music className="w-4 h-4" />
@@ -58,12 +79,13 @@ export function SpotifyNowPlaying() {
       rel="noopener noreferrer"
       className="flex items-center space-x-4 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 rounded-lg p-4 hover:border-green-400/30 transition-colors group"
     >
-      {/* Album Art */}
+      {/* Album Art with lazy loading */}
       <div className="flex-shrink-0">
         <img
           src={data.albumImageUrl}
           alt={data.album}
           className="w-16 h-16 rounded-md shadow-lg transform group-hover:scale-105 transition-transform"
+          loading="lazy"
         />
       </div>
 

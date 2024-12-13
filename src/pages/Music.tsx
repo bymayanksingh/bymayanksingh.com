@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { Terminal, Code, Music as MusicIcon } from 'lucide-react';
 import { SpotifyNowPlaying } from '../components/SpotifyNowPlaying';
 import { SpotifyPlaylist } from '../components/SpotifyPlaylist';
 import { PageHeader } from '../components/PageHeader';
+import { fallbackPlaylists } from '../config/fallbackData';
 
 interface Playlist {
   id: string;
@@ -14,24 +15,40 @@ interface Playlist {
 }
 
 export function Music() {
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [playlists, setPlaylists] = useState<Playlist[]>(fallbackPlaylists);
+  const [loading, setLoading] = useState(false);
   const spotifyProfileUrl = 'https://open.spotify.com/user/YOUR_SPOTIFY_USERNAME'; // Replace with your Spotify username
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     const fetchPlaylists = async () => {
       try {
-        const response = await fetch('/api/spotify/playlists');
+        setLoading(true);
+        const response = await fetch('/api/spotify/playlists', {
+          signal: controller.signal
+        });
+        
+        if (!isMounted) return;
+        
         const data = await response.json();
         setPlaylists(data);
       } catch (error) {
         console.error('Error fetching playlists:', error);
+        // Keep using fallback data on error
       } finally {
+        if (!isMounted) return;
         setLoading(false);
       }
     };
 
     fetchPlaylists();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   return (
@@ -53,7 +70,9 @@ export function Music() {
             <span>spotify status --live</span>
           </div>
           <div className="pl-6 sm:pl-7">
-            <SpotifyNowPlaying />
+            <Suspense fallback={null}>
+              <SpotifyNowPlaying />
+            </Suspense>
           </div>
         </div>
 
@@ -93,7 +112,9 @@ export function Music() {
             <span>ls -la spotify/playlists/</span>
           </div>
           <div className="pl-6 sm:pl-7">
-            <SpotifyPlaylist playlists={playlists} loading={loading} />
+            <Suspense fallback={null}>
+              <SpotifyPlaylist playlists={playlists} loading={loading} />
+            </Suspense>
           </div>
         </div>
       </div>

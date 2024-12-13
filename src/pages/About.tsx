@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import {
   Mail, Phone, Linkedin,
   CheckCircle2, Command,
@@ -16,6 +16,7 @@ import { PageHeader } from '../components/PageHeader';
 import { Affiliations } from '../components/Affiliations';
 import { motion } from 'framer-motion';
 import { TerminalLoader } from '../components/TerminalLoader';
+import { fallbackAbout, fallbackSkills, fallbackCertificates, fallbackStats, fallbackAffiliations, fallbackPublications, fallbackAwards } from '../config/fallbackData';
 
 interface Certificate {
   title: string;
@@ -27,20 +28,23 @@ interface Certificate {
 }
 
 export function About() {
-  const [about, setAbout] = useState<AboutType | null>(null);
-  const [skills, setSkills] = useState<string[]>([]);
-  const [certificates, setCertificates] = useState<Certificate[]>([]);
-  const [stats, setStats] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [about, setAbout] = useState<AboutType>(fallbackAbout);
+  const [skills, setSkills] = useState<string[]>(fallbackSkills);
+  const [certificates, setCertificates] = useState<Certificate[]>(fallbackCertificates);
+  const [stats, setStats] = useState<any>(fallbackStats);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
   const [currentCertificateIndex, setCurrentCertificateIndex] = useState(0);
   const certificatesRef = useRef<HTMLDivElement>(null);
-  const [affiliations, setAffiliations] = useState<Affiliation[]>([]);
-  const [publications, setPublications] = useState<Publication[]>([]);
-  const [awards, setAwards] = useState<AwardData[]>([]);
+  const [affiliations, setAffiliations] = useState<Affiliation[]>(fallbackAffiliations);
+  const [publications, setPublications] = useState<Publication[]>(fallbackPublications);
+  const [awards, setAwards] = useState<AwardData[]>(fallbackAwards);
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -62,23 +66,34 @@ export function About() {
           getAwards()
         ]);
 
+        if (!isMounted) return;
+
         if (aboutResult) setAbout(aboutResult);
-        setSkills(skillsResult);
-        setCertificates(certificatesResult);
+        if (skillsResult?.length > 0) setSkills(skillsResult);
+        if (certificatesResult?.length > 0) setCertificates(certificatesResult);
         if (statsResult) setStats(statsResult);
-        setAffiliations(affiliationsResult.sort((a, b) => b.order - a.order));
-        setPublications(publicationsResult);
-        setAwards(awardsResult);
+        if (affiliationsResult?.length > 0) {
+          setAffiliations(affiliationsResult.sort((a, b) => b.order - a.order));
+        }
+        if (publicationsResult?.length > 0) setPublications(publicationsResult);
+        if (awardsResult?.length > 0) setAwards(awardsResult);
         setError(null);
       } catch (err) {
-        setError('Failed to load data. Please try again later.');
+        if (!isMounted) return;
         console.error('Error fetching data:', err);
+        // Keep using fallback data on error
       } finally {
+        if (!isMounted) return;
         setLoading(false);
       }
     };
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
   }, []);
 
   // Group skills by category
@@ -167,6 +182,7 @@ export function About() {
                       src={about?.image}
                       alt={about?.name}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                 </div>
@@ -203,42 +219,37 @@ export function About() {
                   </div>
 
                   {/* Contact Info */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-800/50">
-                    {about?.email && (
-                      <a
-                        href={`mailto:${about.email}`}
-                        className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
-                      >
-                        <Mail className="w-4 h-4" />
-                        <span>{about.email}</span>
-                      </a>
-                    )}
-                    {about?.phone && (
-                      <a
-                        href={`tel:${about.phone}`}
-                        className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        <span>{about.phone}</span>
-                      </a>
-                    )}
-                    {about?.linkedin && (
-                      <a
-                        href={about.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors"
-                      >
-                        <Linkedin className="w-4 h-4" />
-                        <span>LinkedIn</span>
-                      </a>
-                    )}
-                    {(about?.city || about?.country) && (
+                  <div className="space-y-3">
+                    <h3 className="text-green-400 font-medium">Contact</h3>
+                    <div className="space-y-2">
                       <div className="flex items-center space-x-2 text-gray-400">
-                        <MapPin className="w-4 h-4" />
-                        <span>{[about.city, about.country].filter(Boolean).join(', ')}</span>
+                        <Mail className="w-4 h-4" />
+                        <a href={`mailto:${about?.email}`} className="hover:text-green-400">
+                          {about?.email}
+                        </a>
                       </div>
-                    )}
+                      {about?.phone && (
+                        <div className="flex items-center space-x-2 text-gray-400">
+                          <Phone className="w-4 h-4" />
+                          <a href={`tel:${about?.phone}`} className="hover:text-green-400">
+                            {about?.phone}
+                          </a>
+                        </div>
+                      )}
+                      {about?.linkedin && (
+                        <div className="flex items-center space-x-2 text-gray-400">
+                          <Linkedin className="w-4 h-4" />
+                          <a
+                            href={about.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-green-400"
+                          >
+                            LinkedIn Profile
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -247,182 +258,163 @@ export function About() {
         </section>
 
         {/* Skills Section */}
-        <section className="mt-16">
+        <section className="mt-12">
           <div className="flex items-center space-x-2 mb-6">
             <Terminal className="w-5 h-5 text-green-400" />
             <h2 className="text-xl text-green-400 font-medium">
               <span className="text-gray-400">$</span> ls ./skills/
             </h2>
           </div>
-          <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
-            <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center">
-              <div className="flex items-center space-x-2">
-                <div className="flex space-x-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                </div>
-                <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
-                  <Code className="w-3.5 h-3.5" />
-                  <span>skills.json</span>
-                </div>
-              </div>
-            </div>
-            <div className="p-4">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {Object.entries(groupedSkills).length > 0 ? (
-                  Object.entries(groupedSkills).map(([category, items], index) => (
-                    <motion.div
-                      key={category}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="bg-gray-800/30 rounded-lg p-4 hover:bg-gray-800/50 transition-all duration-300"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Object.entries(groupedSkills).map(([category, categorySkills]) => (
+              <div
+                key={category}
+                className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm p-4"
+              >
+                <h3 className="text-green-400 font-medium mb-3">{category}</h3>
+                <div className="space-y-2">
+                  {categorySkills.map((skill, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center space-x-2 text-gray-400"
                     >
-                      <h3 className="text-green-400 font-medium mb-2">{category}</h3>
-                      <div className="text-sm text-gray-400 space-y-1">
-                        {items.map((item, i) => (
-                          <div key={i} className="flex items-center space-x-2">
-                            <span className="w-1.5 h-1.5 bg-green-400/50 rounded-full"></span>
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className="col-span-full text-gray-400 text-center py-4">
-                    No skills data available
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Certificates Section */}
-        <section className="mt-16">
-          <div className="flex items-center space-x-2 mb-6">
-            <Terminal className="w-5 h-5 text-green-400" />
-            <h2 className="text-xl text-green-400 font-medium">
-              <span className="text-gray-400">$</span> ls ./certificates/
-            </h2>
-          </div>
-          <div className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden">
-            <div className="px-4 py-2.5 bg-gray-900/80 border-b border-gray-800/50 flex items-center">
-              <div className="flex items-center space-x-2">
-                <div className="flex space-x-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                </div>
-                <div className="text-xs text-gray-500 font-medium pl-2 flex items-center space-x-1.5">
-                  <GraduationCap className="w-3.5 h-3.5" />
-                  <span>certificates.json</span>
-                </div>
-              </div>
-            </div>
-            <div className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {certificates.map((cert, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    onClick={() => {
-                      setSelectedCertificate(cert);
-                      setCurrentCertificateIndex(index);
-                    }}
-                    className="group relative bg-gray-800/30 rounded-lg p-4 hover:bg-gray-800/50 transition-all duration-300 cursor-pointer"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-green-400/10 text-green-400 flex items-center justify-center">
-                        <GraduationCap className="w-4 h-4" />
-                      </div>
-                      <div className="flex-grow min-w-0">
-                        <div className="flex items-center justify-between gap-2">
-                          <h3 className="text-green-400 font-medium truncate group-hover:text-green-300 transition-colors">
-                            {cert.title}
-                          </h3>
-                          {cert.verified && (
-                            <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                          )}
-                        </div>
-                        <div className="mt-1 text-sm text-gray-400">
-                          {cert.organization}
-                        </div>
-                        <div className="mt-1 text-xs text-gray-500">
-                          {cert.year}
-                        </div>
-                        {cert.description && (
-                          <p className="mt-2 text-sm text-gray-400 line-clamp-2">
-                            {cert.description}
-                          </p>
-                        )}
-                      </div>
+                      <span className="w-1.5 h-1.5 bg-green-400/50 rounded-full"></span>
+                      <span>{skill}</span>
                     </div>
-                  </motion.div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </section>
 
         {/* Affiliations Section */}
-        <section className="mt-16">
+        <section className="mt-12">
           <div className="flex items-center space-x-2 mb-6">
             <Terminal className="w-5 h-5 text-green-400" />
             <h2 className="text-xl text-green-400 font-medium">
               <span className="text-gray-400">$</span> ls ./affiliations/
             </h2>
           </div>
-          <Affiliations affiliations={affiliations} isLoading={loading} />
+          <Suspense fallback={null}>
+            <Affiliations affiliations={affiliations} />
+          </Suspense>
         </section>
 
         {/* Publications Section */}
-        <section className="mt-16">
+        <section className="mt-12">
           <div className="flex items-center space-x-2 mb-6">
             <Terminal className="w-5 h-5 text-green-400" />
             <h2 className="text-xl text-green-400 font-medium">
               <span className="text-gray-400">$</span> ls ./publications/
             </h2>
           </div>
-          <Publications publications={publications} isLoading={loading} />
+          <Suspense fallback={null}>
+            <Publications publications={publications} />
+          </Suspense>
         </section>
 
         {/* Awards Section */}
-        <section className="mt-16 mb-16">
+        <section className="mt-12">
           <div className="flex items-center space-x-2 mb-6">
             <Terminal className="w-5 h-5 text-green-400" />
             <h2 className="text-xl text-green-400 font-medium">
               <span className="text-gray-400">$</span> ls ./awards/
             </h2>
           </div>
-          <Awards awards={awards} isLoading={loading} />
+          <Suspense fallback={null}>
+            <Awards awards={awards} />
+          </Suspense>
         </section>
 
-        {/* Image Modal */}
+        {/* Certificates Section */}
+        <section className="mt-12" ref={certificatesRef}>
+          <div className="flex items-center space-x-2 mb-6">
+            <Terminal className="w-5 h-5 text-green-400" />
+            <h2 className="text-xl text-green-400 font-medium">
+              <span className="text-gray-400">$</span> ls ./certificates/
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {certificates.map((certificate, index) => (
+              <motion.div
+                key={certificate.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="bg-gray-900/50 rounded-lg border border-gray-800/50 backdrop-blur-sm overflow-hidden hover:border-green-400/30 transition-colors cursor-pointer group"
+                onClick={() => {
+                  setSelectedCertificate(certificate);
+                  setCurrentCertificateIndex(index);
+                }}
+              >
+                <div className="aspect-video relative">
+                  <img
+                    src={certificate.image}
+                    alt={certificate.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  {certificate.verified && (
+                    <div className="absolute top-2 right-2 bg-green-400/20 backdrop-blur-sm rounded-full p-1">
+                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                    </div>
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="text-white font-medium mb-1 group-hover:text-green-400 transition-colors">
+                    {certificate.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm mb-2">
+                    {certificate.organization}
+                  </p>
+                  <div className="flex items-center space-x-2 text-gray-500 text-xs">
+                    <GraduationCap className="w-4 h-4" />
+                    <span>{certificate.year}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Certificate Modal */}
         {selectedCertificate && (
           <ImageModal
             isOpen={!!selectedCertificate}
             onClose={() => setSelectedCertificate(null)}
-            image={selectedCertificate.image}
-            title={selectedCertificate.title}
-            caption={`${selectedCertificate.organization} - ${selectedCertificate.year}`}
-            onPrevious={() => {
-              const newIndex = currentCertificateIndex === 0 ? certificates.length - 1 : currentCertificateIndex - 1;
-              setCurrentCertificateIndex(newIndex);
-              setSelectedCertificate(certificates[newIndex]);
-            }}
-            onNext={() => {
-              const newIndex = currentCertificateIndex === certificates.length - 1 ? 0 : currentCertificateIndex + 1;
-              setCurrentCertificateIndex(newIndex);
-              setSelectedCertificate(certificates[newIndex]);
-            }}
-            showNavigation={certificates.length > 1}
+            images={certificates.map(cert => ({
+              url: cert.image,
+              caption: cert.title
+            }))}
             currentIndex={currentCertificateIndex}
             totalItems={certificates.length}
+            onPrevious={() => {
+              setCurrentCertificateIndex(
+                (currentCertificateIndex - 1 + certificates.length) % certificates.length
+              );
+              setSelectedCertificate(certificates[
+                (currentCertificateIndex - 1 + certificates.length) % certificates.length
+              ]);
+            }}
+            onNext={() => {
+              setCurrentCertificateIndex(
+                (currentCertificateIndex + 1) % certificates.length
+              );
+              setSelectedCertificate(certificates[
+                (currentCertificateIndex + 1) % certificates.length
+              ]);
+            }}
+            showNavigation={true}
+            title={selectedCertificate.title}
+            renderImage={(image) => (
+              <img
+                src={image.url}
+                alt={image.caption}
+                className="max-h-[calc(80vh-8rem)] object-contain rounded-lg"
+                loading="lazy"
+              />
+            )}
           />
         )}
       </div>

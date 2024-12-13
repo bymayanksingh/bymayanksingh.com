@@ -5,10 +5,11 @@ import type { Affiliation } from '../services/firebaseService';
 
 interface AffiliationsProps {
   affiliations: Affiliation[];
-  isLoading: boolean;
 }
 
-const getIconComponent = (iconType: string) => {
+const getIconComponent = (iconType?: string) => {
+  if (!iconType) return Building2;
+  
   switch (iconType.toLowerCase()) {
     case 'tech':
       return Code;
@@ -23,18 +24,9 @@ const getIconComponent = (iconType: string) => {
   }
 };
 
-export function Affiliations({ affiliations, isLoading }: AffiliationsProps) {
-  if (isLoading) {
-    return (
-      <div className="animate-pulse space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-gray-800/50 rounded-lg p-4">
-            <div className="h-5 bg-gray-700/50 rounded w-1/4 mb-2"></div>
-            <div className="h-4 bg-gray-700/50 rounded w-3/4"></div>
-          </div>
-        ))}
-      </div>
-    );
+export function Affiliations({ affiliations }: AffiliationsProps) {
+  if (!affiliations?.length) {
+    return null;
   }
 
   return (
