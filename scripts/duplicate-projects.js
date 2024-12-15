@@ -81,7 +81,7 @@ async function duplicateProjects() {
 
     // Commit the batch
     await batch.commit();
-    console.log('Successfully added 30 duplicate projects');
+    //console.log('Successfully added 30 duplicate projects');
     process.exit(0);
   } catch (error) {
     console.error('Error adding documents:', error);

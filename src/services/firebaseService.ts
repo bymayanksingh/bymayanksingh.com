@@ -3,24 +3,44 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../config/firebase';
 
 export interface Project {
-  id: string;
-  slug: string;
+  id?: string;
   title: string;
-  category: string;
-  location: string;
-  date: string;
-  year: number;
-  coverImage: string;
+  slug: string;
   description: string;
-  client: string;
+  details: string;
+  technologies: string[];
+  category: string;
+  status: 'Live' | 'In Progress' | 'Archived';
   featured: boolean;
-  area: string;
-  status: string;
-  details: string[];
-  gallery: Array<{
+  year: number;
+  github_url?: string;
+  website_url?: string;
+  instagram_url?: string;
+  icon_url?: string;
+  users_count?: number;
+  coverImage: string | {
     url: string;
-    caption: string;
+    credit?: {
+      name: string;
+      link: string;
+    };
+  };
+  gallery?: Array<{
+    url: string;
+    caption?: string;
   }>;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ImageCredit {
+  name: string;
+  link: string;
+}
+
+interface ProjectImage {
+  url: string;
+  credit?: ImageCredit;
 }
 
 export interface Hero {
@@ -242,6 +262,14 @@ const createSlug = (text: string | undefined | null, id: string): string => {
     .replace(/(^-|-$)/g, '');
 };
 
+// Helper function to process image URLs
+const processImageField = async (image: any): Promise<string | ProjectImage> => {
+  if (!image) return '';
+  if (typeof image === 'string') return image;
+  if (image.url) return image;
+  return await getStorageUrl(image);
+};
+
 // Hero
 export const getHero = async (): Promise<Hero | null> => {
   try {
@@ -255,155 +283,109 @@ export const getHero = async (): Promise<Hero | null> => {
 };
 
 // Projects
-export const getProjects = async (): Promise<Project[]> => {
+export async function getAllProjects(): Promise<Project[]> {
   try {
     const projectsRef = collection(db, 'projects');
-    const querySnapshot = await getDocs(projectsRef);
+    const q = query(projectsRef, orderBy('created_at', 'desc'));
+    const querySnapshot = await getDocs(q);
     
-    console.log('All project IDs in database:', querySnapshot.docs.map(doc => doc.id));
-    
-    const projects = await Promise.all(
-      querySnapshot.docs.map(async (doc) => {
-        const data = doc.data();
-        const id = doc.id;
-        
-        // Generate slug from title or use fallback
-        const slug = data.slug || createSlug(data.title, id);
-        
-        // Process coverImage and gallery URLs
-        const coverImage = await getStorageUrl(data.coverImage || '');
-        const gallery = data.gallery ? await Promise.all(
-          data.gallery.map(async (item: { url: string; caption: string }) => ({
-            url: await getStorageUrl(item.url || ''),
-            caption: item.caption || ''
-          }))
-        ) : [];
-
-        // Construct project with all required fields and fallbacks
-        const project = {
-          id,
-          title: data.title || `Project ${id.slice(0, 8)}`,
-          slug,
-          description: data.description || '',
-          coverImage,
-          gallery,
-          category: data.category || 'Uncategorized',
-          client: data.client || '',
-          location: data.location || '',
-          area: data.area || '',
-          status: data.status || '',
-          year: data.year || '',
-          featured: !!data.featured,
-          details: data.details || [],
-          ...data
-        } as Project;
-
-        console.log(`Processed project ${id}:`, { id: project.id, title: project.title, slug: project.slug });
-        return project;
-      })
-    );
-
-    return projects;
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      } as Project;
+    });
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return [];
+    throw error;
   }
-};
+}
+
+export async function getProjects(): Promise<Project[]> {
+  return getAllProjects(); // For backward compatibility
+}
 
 export const getProject = async (idOrSlug: string): Promise<Project | null> => {
   try {
-    console.log('Fetching project with ID/slug:', idOrSlug);
+    if (!idOrSlug) {
+      console.error('No ID or slug provided');
+      return null;
+    }
+
+    //console.log('Fetching project with ID/slug:', idOrSlug);
     
-    // First try to get the project directly by ID
-    let docRef = doc(db, 'projects', idOrSlug);
-    let docSnap = await getDoc(docRef);
+    // Try to get the project directly by ID first
+    const projectDoc = await getDoc(doc(db, 'projects', idOrSlug));
     
-    // If not found by ID, try to find by slug
-    if (!docSnap.exists()) {
-      console.log('Project not found by ID, trying slug...');
-      const projectsRef = collection(db, 'projects');
-      const q = query(projectsRef, where('slug', '==', idOrSlug));
+    let projectData;
+    if (projectDoc.exists()) {
+      projectData = { ...projectDoc.data(), id: projectDoc.id };
+    } else {
+      // If not found by ID, try to find by slug
+      const q = query(collection(db, 'projects'), where('slug', '==', idOrSlug));
       const querySnapshot = await getDocs(q);
       
       if (querySnapshot.empty) {
-        // Try to find by generated slug
-        const allProjects = await getProjects();
-        const projectBySlug = allProjects.find(p => p.slug === idOrSlug);
-        
-        if (!projectBySlug) {
-          console.log('Project not found by slug either:', idOrSlug);
-          return null;
-        }
-        
-        return projectBySlug;
+        //console.log('No project found with ID/slug:', idOrSlug);
+        return null;
       }
       
-      docSnap = querySnapshot.docs[0];
+      projectData = { ...querySnapshot.docs[0].data(), id: querySnapshot.docs[0].id };
     }
+    
+    // Process coverImage and gallery
+    const coverImage = await processImageField(projectData.coverImage);
+    const gallery = projectData.gallery 
+      ? await Promise.all(projectData.gallery.map((item: any) => processImageField(item)))
+      : [];
 
-    const data = docSnap.data();
-    const id = docSnap.id;
-
-    // Generate slug if not present
-    const slug = data.slug || createSlug(data.title, id);
-
-    // Process images
-    const coverImage = await getStorageUrl(data.coverImage || '');
-    const gallery = data.gallery ? await Promise.all(
-      data.gallery.map(async (item: { url: string; caption: string }) => ({
-        url: await getStorageUrl(item.url || ''),
-        caption: item.caption || ''
-      }))
-    ) : [];
-
-    // Construct project with all required fields and fallbacks
-    const project = {
-      id,
-      title: data.title || `Project ${id.slice(0, 8)}`,
-      slug,
-      description: data.description || '',
+    return {
+      id: projectData.id,
+      slug: projectData.slug || '',
+      title: projectData.title || '',
+      description: projectData.description || '',
+      details: projectData.details || '',
+      technologies: Array.isArray(projectData.technologies) ? projectData.technologies : [],
+      category: projectData.category || '',
+      status: projectData.status || 'Live',
+      featured: !!projectData.featured,
+      year: projectData.year || new Date().getFullYear(),
+      github_url: projectData.github_url || '',
+      website_url: projectData.website_url || '',
       coverImage,
       gallery,
-      category: data.category || 'Uncategorized',
-      client: data.client || '',
-      location: data.location || '',
-      area: data.area || '',
-      status: data.status || '',
-      year: data.year || '',
-      featured: !!data.featured,
-      details: data.details || [],
-      ...data
-    } as Project;
-
-    console.log('Successfully processed project:', { id: project.id, title: project.title, slug: project.slug });
-    return project;
+      created_at: projectData.created_at || new Date().toISOString(),
+      updated_at: projectData.updated_at || new Date().toISOString()
+    };
   } catch (error) {
     console.error('Error fetching project:', error);
-    console.error('Project ID/slug:', idOrSlug);
-    return null;
+    throw error;
   }
 };
 
 export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
   try {
-    console.log('Fetching project with slug:', slug);
+    //console.log('Fetching project with slug:', slug);
     
     const projectsRef = collection(db, 'projects');
     const q = query(projectsRef, where('slug', '==', slug));
     const querySnapshot = await getDocs(q);
     
     if (querySnapshot.empty) {
-      console.log('Project not found by slug:', slug);
+      //console.log('Project not found by slug:', slug);
       return null;
     }
     
     const docSnap = querySnapshot.docs[0];
     const data = docSnap.data();
-    console.log('Raw project data:', data);
+    //console.log('Raw project data:', data);
 
     // Process coverImage
     const coverImage = await getStorageUrl(data.coverImage || '');
-    console.log('Processed cover image:', coverImage);
+    //console.log('Processed cover image:', coverImage);
 
     // Process gallery images
     const gallery = data.gallery ? await Promise.all(
@@ -412,7 +394,7 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
         caption: item.caption || ''
       }))
     ) : [];
-    console.log('Processed gallery:', gallery);
+    //console.log('Processed gallery:', gallery);
 
     // Convert year to number if it's a string
     const year = typeof data.year === 'string' ? parseInt(data.year) : data.year;
@@ -431,7 +413,7 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
       gallery
     } as Project;
 
-    console.log('Final processed project:', project);
+    //console.log('Final processed project:', project);
     return project;
   } catch (error) {
     console.error('Error fetching project:', error);
@@ -561,7 +543,7 @@ export const getCertificates = async (): Promise<Certificate[]> => {
       if (data.image) {
         try {
           imageUrl = await getStorageUrl(data.image);
-          console.log('Certificate image URL processed:', imageUrl);
+          //console.log('Certificate image URL processed:', imageUrl);
         } catch (error) {
           console.error('Error processing certificate image:', error);
         }

@@ -33,12 +33,12 @@ const CategoryButton = memo(({
 // Memoized project card component
 const ProjectCard = memo(({ project }: { project: Project }) => (
   <Link
-    to={`/projects/${project.slug}`}
+    to={`/projects/${project.id}`}
     className="group bg-gray-900/50 rounded-lg overflow-hidden border border-gray-800/50 hover:border-green-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/10 backdrop-blur-sm"
   >
     <div className="aspect-video overflow-hidden relative">
       <ImageFallback
-        src={project.coverImage}
+        src={typeof project.coverImage === 'string' ? project.coverImage : project.coverImage.url}
         alt={project.title}
         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
       />

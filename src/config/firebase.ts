@@ -16,7 +16,7 @@ const requiredEnvVars = {
 
 // Log environment variables in development
 if (import.meta.env.DEV) {
-  // console.log('Firebase Config:', {
+  // //console.log('Firebase Config:', {
   //   apiKey: requiredEnvVars.apiKey ? '✓' : '✗',
   //   authDomain: requiredEnvVars.authDomain ? '✓' : '✗',
   //   projectId: requiredEnvVars.projectId ? '✓' : '✗',

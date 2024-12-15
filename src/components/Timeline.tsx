@@ -14,7 +14,7 @@ export function Timeline() {
       try {
         const data = await getTimeline();
         const sortedData = [...data].sort((a, b) => b.year - a.year); // Sort by year in descending order
-        console.log('Sorted timeline data:', sortedData);
+        //console.log('Sorted timeline data:', sortedData);
         setTimelineData(sortedData);
       } catch (error) {
         console.error('Error fetching timeline data:', error);

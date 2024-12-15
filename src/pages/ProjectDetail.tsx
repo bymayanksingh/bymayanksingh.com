@@ -4,6 +4,7 @@ import { Terminal, ArrowLeft, Calendar, MapPin, Layout, Code, Building2, GitBran
 import { getProject, type Project } from '../services/firebaseService';
 import { ImageFallback } from '../components/ImageFallback';
 import { ImageModal } from '../components/ImageModal';
+import { SkillIcon } from '../components/SkillIcon';
 
 export function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -25,7 +26,7 @@ export function ProjectDetail() {
       try {
         setLoading(true);
         setError(null);
-        console.log('Attempting to fetch project with slug:', slug);
+        //console.log('Attempting to fetch project with slug:', slug);
         const data = await getProject(slug);
 
         if (!data) {
@@ -35,7 +36,7 @@ export function ProjectDetail() {
           return;
         }
 
-        console.log('Successfully fetched project:', data);
+        //console.log('Successfully fetched project:', data);
         setProject(data);
         setLoading(false);
       } catch (error) {
@@ -116,34 +117,10 @@ export function ProjectDetail() {
             <h1 className="text-2xl">{project.title}</h1>
           </div>
           <div className="flex flex-wrap gap-4 text-sm text-gray-400">
-            {project.date && (
+            {project.year && (
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2" />
-                <span>{project.date}</span>
-              </div>
-            )}
-            {project.location && (
-              <div className="flex items-center">
-                <MapPin className="w-4 h-4 mr-2" />
-                <span>{project.location}</span>
-              </div>
-            )}
-            {project.area && (
-              <div className="flex items-center">
-                <Layout className="w-4 h-4 mr-2" />
-                <span>{project.area}</span>
-              </div>
-            )}
-            {project.client && (
-              <div className="flex items-center">
-                <Building2 className="w-4 h-4 mr-2" />
-                <span>{project.client}</span>
-              </div>
-            )}
-            {project.status && (
-              <div className="flex items-center">
-                <CheckCircle2 className="w-4 h-4 mr-2" />
-                <span>{project.status}</span>
+                <span>{project.year}</span>
               </div>
             )}
             {project.category && (
@@ -152,6 +129,23 @@ export function ProjectDetail() {
                 <span>{project.category}</span>
               </div>
             )}
+            {project.status && (
+              <div className="flex items-center">
+                <CheckCircle2 className="w-4 h-4 mr-2" />
+                <span>{project.status}</span>
+              </div>
+            )}
+            {project.github_url && (
+              <a 
+                href={project.github_url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center hover:text-green-400 transition-colors"
+              >
+                <Code className="w-4 h-4 mr-2" />
+                <span>View on GitHub</span>
+              </a>
+            )}
           </div>
         </div>
 
@@ -159,11 +153,16 @@ export function ProjectDetail() {
         <div className="mb-8">
           <div className="aspect-video bg-gray-800 rounded-lg overflow-hidden">
             <ImageFallback
-              src={project.coverImage}
+              src={typeof project.coverImage === 'string' ? project.coverImage : project.coverImage.url}
               alt={project.title}
               className="w-full h-full object-cover"
               fallbackClassName="w-full h-full flex items-center justify-center bg-gray-800"
             />
+            {typeof project.coverImage !== 'string' && project.coverImage.credit && (
+              <div className="text-xs text-gray-500 mt-2">
+                Photo by <a href={project.coverImage.credit.link} target="_blank" rel="noopener noreferrer" className="hover:text-green-400">{project.coverImage.credit.name}</a>
+              </div>
+            )}
           </div>
         </div>
 
@@ -172,18 +171,49 @@ export function ProjectDetail() {
           <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{project.description}</p>
         </div>
 
-        {/* Project Details */}
-        {project.details && project.details.length > 0 && (
+        {/* Technologies */}
+        {project.technologies && (
           <div className="mb-12">
             <h2 className="text-xl mb-4 flex items-center">
               <Code className="w-5 h-5 mr-2 text-green-400" />
+              Technologies Used
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {(Array.isArray(project.technologies) ? project.technologies : project.technologies.split(',').map(t => t.trim()))
+                .map((tech, index) => (
+                  <div 
+                    key={index} 
+                    className="px-3 py-2 bg-gray-800 rounded-lg text-sm text-green-400 flex items-center gap-2 hover:bg-gray-700 transition-colors"
+                  >
+                    <SkillIcon skill={tech} />
+                    <span>{tech}</span>
+                  </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Role */}
+        {project.role && (
+          <div className="mb-12">
+            <h2 className="text-xl mb-4 flex items-center">
+              <Building2 className="w-5 h-5 mr-2 text-green-400" />
+              My Role
+            </h2>
+            <p className="text-gray-300 leading-relaxed">{project.role}</p>
+          </div>
+        )}
+
+        {/* Project Details */}
+        {project.details && (
+          <div className="mb-12">
+            <h2 className="text-xl mb-4 flex items-center">
+              <Layout className="w-5 h-5 mr-2 text-green-400" />
               Project Details
             </h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-300">
-              {project.details.map((detail, index) => (
-                <li key={index} className="leading-relaxed">{detail}</li>
-              ))}
-            </ul>
+            <div className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+              {project.details}
+            </div>
           </div>
         )}
 
@@ -202,19 +232,22 @@ export function ProjectDetail() {
                   onClick={() => handleImageClick(index)}
                 >
                   <ImageFallback
-                    src={image.url}
-                    alt={image.caption || `Gallery image ${index + 1}`}
+                    src={typeof image === 'string' ? image : image.url}
+                    alt={`${project.title} gallery image ${index + 1}`}
                     className="w-full h-full object-cover"
                     fallbackClassName="w-full h-full flex items-center justify-center bg-gray-800"
                   />
+                  {typeof image !== 'string' && image.credit && (
+                    <div className="text-xs text-gray-500 mt-2">
+                      Photo by <a href={image.credit.link} target="_blank" rel="noopener noreferrer" className="hover:text-green-400">{image.credit.name}</a>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         )}
       </div>
-
-
 
       {/* Image Modal */}
       {project.gallery && (
@@ -223,7 +256,12 @@ export function ProjectDetail() {
           onClose={() => setIsImageModalOpen(false)}
           images={project.gallery}
           activeIndex={activeImageIndex}
-          onIndexChange={setActiveImageIndex}
+          onPrevious={() => setActiveImageIndex((prev) => (prev > 0 ? prev - 1 : project.gallery!.length - 1))}
+          onNext={() => setActiveImageIndex((prev) => (prev < project.gallery!.length - 1 ? prev + 1 : 0))}
+          showNavigation={true}
+          currentIndex={activeImageIndex}
+          totalItems={project.gallery.length}
+          title={project.title}
         />
       )}
     </div>
